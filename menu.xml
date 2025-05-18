@@ -1,5 +1,4 @@
 <menu>
-
     <menuitem label='Participante'>
         <menu>
             <menuitem label='Eventos Abertos'>
@@ -8,9 +7,9 @@
             </menuitem>
             <menuitem label='Minhas Inscrições'>
                 <icon></icon>
-                <action>MinhasIncricoesView</action>
+                <action>MinhasInscricoesView</action>
             </menuitem>
-            <menuitem label='Meus Certificados'>
+            <menuitem>
                 <icon></icon>
                 <action>MeusCertificadosView</action>
             </menuitem>
@@ -23,13 +22,29 @@
                 <icon></icon>
                 <action>EventosView</action>
             </menuitem>
+            <menuitem>
+                <icon></icon>
+                <action>EventosFormView</action>
+            </menuitem>
             <menuitem label='Inscrições'>
                 <icon></icon>
                 <action>InscricoesView</action>
             </menuitem>
+            <menuitem>
+                <icon></icon>
+                <action>InscricoesFormView</action>
+            </menuitem>
             <menuitem label='Certificados'>
                 <icon></icon>
                 <action>CertificadosView</action>
+            </menuitem>
+            <menuitem>
+                <icon></icon>
+                <action>CertificadosFormView</action>
+            </menuitem>
+            <menuitem>
+                <icon></icon>
+                <action>CertificadoHtmlPdfView</action>
             </menuitem>
         </menu>
     </menuitem>
