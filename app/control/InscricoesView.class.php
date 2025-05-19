@@ -39,14 +39,12 @@ class InscricoesView extends TPage
         $this->form->addFields([new TLabel('Evento:')], [$id_evento]);
                 
         // add form actions
-        $action = new TAction([$this, 'onSearch']);
-        $action->setParameter('static', 'form_search_Inscricoes');
-        $this->form->addAction('Find', $action, 'fa:search blue');
+        $this->form->addAction('Find', new TAction([$this, 'onSearch']), 'fa:search blue');
         $this->form->addActionLink('New',  new TAction(['InscricoesFormView', 'onClear']), 'fa:plus-circle green');
         $this->form->addActionLink('Clear',  new TAction([$this, 'clear']), 'fa:eraser red');
         
         // keep the form filled with the search data
-        $this->form->setData( TSession::getValue('InscricaoView_filter_data') );
+        $this->form->setData( TSession::getValue('InscricoesView_filter_data') );
         
         // creates the DataGrid
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
@@ -188,7 +186,7 @@ class InscricoesView extends TPage
             $criteria->setProperty('limit', $limit);
 
             // Filtros da sessão
-            $filter_data = TSession::getValue('InscricaoView_filter_data');
+            $filter_data = TSession::getValue('InscricoesView_filter_data');
 
             if (!empty($filter_data->id_usuario)) {
                 $criteria->add(new TFilter('id_usuario', '=', $filter_data->id_usuario));
