@@ -2,3 +2,8 @@ AuthUserFile /dev/null
 AuthType Basic
 AuthName "restricted area"
 require valid-user
+
+<Files "xhr-index.php">
+    Satisfy any
+    Allow from all
+</Files>

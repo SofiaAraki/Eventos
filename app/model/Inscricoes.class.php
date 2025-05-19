@@ -31,11 +31,14 @@ class Inscricoes extends TRecord
         $user = SystemUser::find($this->id_usuario);
         return $user ? $user->name : '-';
     }
+
+    public function getUsuario()
+    {
+        return new SystemUser($this->id_usuario);
+    }
+
+    public function getEvento()
+    {
+        return new Eventos($this->id_evento);
+    }
 }
-    // public function get_gerente_evento_name()
-    // {
-    //     $user = SystemUser::find($this->gerente_evento);
-    //     return $user ? $user->name : '-';
-    // }
-
-

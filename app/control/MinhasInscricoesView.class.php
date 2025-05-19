@@ -30,6 +30,10 @@ class MinhasInscricoesView extends TStandardList
         $this->datagrid->addColumn($data_inscricao);
         $this->datagrid->addColumn($status_inscricao);
 
+        $data_inscricao->setTransformer(function($value, $object, $row) {
+            $date = new DateTime($value);
+            return $date->format('d/m/Y H:i');
+        });
         $status_inscricao->setTransformer(function ($value, $object, $row) {
             switch ($value) {
                 case 0: return '<span class="label label-danger">Pendente</span>';
@@ -38,12 +42,9 @@ class MinhasInscricoesView extends TStandardList
             }
         });
 
-        // $action1 = new TDataGridAction([$this, 'EmitirCertificado']);
-        // $action1->setUseButton(TRUE);
-        // $this->datagrid->addAction($action1, 'Emitir Certificado', 'fa:certificate blue');
         $action1 = new TDataGridAction([$this, 'EmitirCertificado'], ['id_inscricao' => '{id_inscricao}']);
         $action1->setUseButton(TRUE);
-        $action1->setField('id_inscricao'); // <<< ESSENCIAL para o Adianti saber qual registro acionar
+        $action1->setField('id_inscricao');
         $this->datagrid->addAction($action1, 'Emitir Certificado', 'fa:certificate blue');
         
         $this->datagrid->createModel();
@@ -103,7 +104,7 @@ class MinhasInscricoesView extends TStandardList
 
             // Usa o objeto TRecord diretamente
             $html = new AdiantiHTMLDocumentParser('app/resources/certificado.html', 'A4', 'landscape');
-            $html->setMaster($inscricao); // <<< Corrigido aqui
+            $html->setMaster($inscricao); 
             $html->process();
 
             $contents = $html->getContents();

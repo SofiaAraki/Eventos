@@ -17,11 +17,7 @@ class EventosView extends TPage
     
     // trait with onReload, onSearch, onDelete...
     use Adianti\Base\AdiantiStandardListTrait;
-    
-    /**
-     * Class constructor
-     * Creates the page, the form and the listing
-     */
+
     public function __construct()
     {
         parent::__construct();
@@ -36,7 +32,7 @@ class EventosView extends TPage
         $this->form->setFormTitle('Gerenciamento de Eventos');
         
         $titulo_evento = new TEntry('titulo_evento');
-        $this->form->addFields( [new TLabel('Evento:')], [$titulo_evento] );
+        $this->form->addFields( [new TLabel('Evento:', 'red')], [$titulo_evento] );
                 
         // add form actions
         $this->form->addAction('Find', new TAction([$this, 'onSearch']), 'fa:search blue');
@@ -71,6 +67,16 @@ class EventosView extends TPage
                 case 1: return '<span class="label label-success">Aberto</span>';
                 default: return $value;
             }
+        });
+
+        $data_inicio_evento->setTransformer(function($value, $object, $row) {
+            $date = new DateTime($value);
+            return $date->format('d/m/Y H:i');
+        });
+
+        $data_fim_evento->setTransformer(function($value, $object, $row) {
+            $date = new DateTime($value);
+            return $date->format('d/m/Y H:i');
         });
         
         $id_evento->setAction( new TAction([$this, 'onReload']),   ['order' => 'id_evento']);

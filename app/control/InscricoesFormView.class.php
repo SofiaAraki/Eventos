@@ -16,10 +16,6 @@ class InscricoesFormView extends TPage
     // trait with onSave, onClear, onEdit
     use Adianti\Base\AdiantiStandardFormTrait;
     
-    /**
-     * Class constructor
-     * Creates the page and the registration form
-     */
     function __construct()
     {
         parent::__construct();
@@ -33,7 +29,7 @@ class InscricoesFormView extends TPage
         $this->form->setClientValidation(true);
         
         // create the form fields
-        $id       = new TEntry('id');
+        $id       = new THidden('id');
         $id->setEditable(FALSE);
         try {
             TTransaction::open('test');
@@ -62,11 +58,13 @@ class InscricoesFormView extends TPage
         $status_inscricao->addValidation('Status', new TRequiredValidator);
         
         // add the form fields
-        $this->form->addFields( [new TLabel('ID')], [$id] );
+        $this->form->addFields( [$id] );
         $this->form->addFields( [new TLabel('Evento', 'red')], [$id_evento] );
         $this->form->addFields( [new TLabel('Usuário', 'red')], [$id_usuario] );
-        $this->form->addFields( [new TLabel('Data Inscrição', 'red')], [$data_inscricao] );
-        $this->form->addFields( [new TLabel('Status Inscrição', 'red')], [$status_inscricao] );
+        $this->form->addFields( 
+            [new TLabel('Data Inscrição', 'red')], [$data_inscricao],
+            [new TLabel('Status Inscrição', 'red')], [$status_inscricao]
+        );
         
         $id_evento->addValidation( 'Evento', new TRequiredValidator);
         
@@ -105,7 +103,7 @@ class InscricoesFormView extends TPage
             TTransaction::close();  // close the transaction
             
             // shows the success message
-            new TMessage('info', 'Record saved');
+            new TMessage('info', 'Inscrição criado com sucesso!');
         }
         catch (Exception $e) // in case of exception
         {

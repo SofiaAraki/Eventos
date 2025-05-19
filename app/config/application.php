@@ -4,7 +4,7 @@ return [
         'timezone' => 'America/Sao_Paulo',
         'language' => 'pt',
         'application' => 'template',
-        'title' => 'Adianti Template 8.1',
+        'title' => 'Eventos',
         'theme' => 'adminbs5',
         'seed' => 'odfu6asnodf8as',
         'rest_key' => '',
@@ -22,7 +22,7 @@ return [
         'multi_database' => '0',
         'validate_strong_pass' => '1',
         'notification_login' => '0',
-        'welcome_message' => 'Have a great jorney!',
+        'welcome_message' => 'Garanta já seu Certificado!',
         'request_log_service' => 'SystemRequestLogService',
         'request_log' => '0',
         'request_log_types' => 'cli,web,rest',
@@ -56,7 +56,7 @@ return [
     ],
     'login' => [
         'logo' => '',
-        'background' => ''
+        'background' => 'test.png'
     ],
     'template' => [
         'navbar' => [

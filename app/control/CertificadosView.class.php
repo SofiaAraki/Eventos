@@ -17,11 +17,7 @@ class CertificadosView extends TPage
     
     // trait with onReload, onSearch, onDelete...
     use Adianti\Base\AdiantiStandardListTrait;
-    
-    /**
-     * Class constructor
-     * Creates the page, the form and the listing
-     */
+
     public function __construct()
     {
         parent::__construct();
@@ -36,7 +32,7 @@ class CertificadosView extends TPage
         $this->form->setFormTitle('Gerenciamento de Certificados');
         
         $titulo_certificado = new TEntry('titulo_certificado');
-        $this->form->addFields( [new TLabel('Modelo:')], [$titulo_certificado] );
+        $this->form->addFields( [new TLabel('Modelo:', 'red')], [$titulo_certificado] );
                 
         // add form actions
         $this->form->addAction('Find', new TAction([$this, 'onSearch']), 'fa:search blue');
@@ -52,9 +48,9 @@ class CertificadosView extends TPage
         
         // creates the datagrid columns
         $id_certificado    = new TDataGridColumn('id_certificado', 'ID', 'left', '5%');
-        $titulo_certificado  = new TDataGridColumn('titulo_certificado', 'Modelo', 'left', '30%');
+        $titulo_certificado  = new TDataGridColumn('titulo_certificado', 'Modelo', 'center', '30%');
         $data_emissao_certificado = new TDataGridColumn('data_emissao_certificado', 'Data de Emissão', 'center', '15%');
-        $id_evento = new TDataGridColumn('evento', 'Evento', 'left', '40%');
+        $id_evento = new TDataGridColumn('evento', 'Evento', 'center', '40%');
         $carga_horaria_certificado = new TDataGridColumn('carga_horaria_certificado', 'Carga Horária', 'center', '10%');
                 
         $this->datagrid->addColumn($id_certificado);
@@ -63,6 +59,11 @@ class CertificadosView extends TPage
         $this->datagrid->addColumn($id_evento);
         $this->datagrid->addColumn($carga_horaria_certificado);
         
+        $data_emissao_certificado->setTransformer(function($value, $object, $row) {
+            $date = new DateTime($value);
+            return $date->format('d/m/Y H:i');
+        });
+
         $id_certificado->setAction( new TAction([$this, 'onReload']),   ['order' => 'id_certificado']);
         $titulo_certificado->setAction( new TAction([$this, 'onReload']), ['order' => 'titulo_certificado']);
         
@@ -106,8 +107,8 @@ class CertificadosView extends TPage
             if (isset($param['id']))
             {
                 $key = $param['id'];  // get the parameter
-                TTransaction::open('test');   // open a transaction with database 'samples'
-                $object = new Certificados($key);        // instantiates object City
+                TTransaction::open('test');   // open a transaction with database 
+                $object = new Certificados($key);        // instantiates object
                 $this->form->setData($object);   // fill the form with the active record data
                 TTransaction::close();           // close the transaction
             }

@@ -10,10 +10,6 @@
  */
 class WelcomeView extends TPage
 {
-    /**
-     * Class constructor
-     * Creates the page
-     */
     function __construct()
     {
         parent::__construct();

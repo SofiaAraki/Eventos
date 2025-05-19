@@ -2,3 +2,4 @@ AuthUserFile /root/.htpasswd
 AuthType Basic
 AuthName "restricted area"
 require valid-user
+

@@ -16,10 +16,6 @@ class EventosFormView extends TPage
     // trait with onSave, onClear, onEdit
     use Adianti\Base\AdiantiStandardFormTrait;
     
-    /**
-     * Class constructor
-     * Creates the page and the registration form
-     */
     function __construct()
     {
         parent::__construct();
@@ -29,17 +25,31 @@ class EventosFormView extends TPage
         
         // creates the form
         $this->form = new BootstrapFormBuilder('form_Evento');
-        $this->form->setFormTitle(_t('Novo Evento'));
+        $this->form->setFormTitle('Novo Evento');
         $this->form->setClientValidation(true);
         
         // create the form fields
-        $id       = new TEntry('id');
+        $id       = new THidden('id');
         $id->setEditable(FALSE);
         $titulo_evento     = new TEntry('titulo_evento');
+        $data_inicio_evento     = new TDateTime('data_inicio_evento'); $data_inicio_evento->setMask('dd/mm/yyyy hh:ii');
+        $data_fim_evento     = new TDateTime('data_fim_evento'); $data_fim_evento->setMask('dd/mm/yyyy hh:ii');
+        $local_evento     = new TEntry('local_evento');
+        $descricao_evento     = new TText('descricao_evento');
+        $status_evento     = new TCombo('status_evento');
+        $status_evento->addItems(['1' => 'Ativo', '0' => 'Inativo']);
+        
 
         // add the form fields
-        $this->form->addFields( [new TLabel('ID')], [$id] );
-        $this->form->addFields( [new TLabel('Titulo', 'red')], [$titulo_evento] );
+        $this->form->addFields( [$id] );
+        $this->form->addFields( [new TLabel('Evento', 'red')], [$titulo_evento] );
+        $this->form->addFields( [new TLabel('Local', 'red')], [$local_evento] );
+        $this->form->addFields( 
+            [new TLabel('Data de Inicio', 'red')], [$data_inicio_evento],
+            [new TLabel('Data de Fim', 'red')], [$data_fim_evento],
+            [new TLabel('Status', 'red')], [$status_evento]
+        );  
+        $this->form->addFields( [new TLabel('Descrição', 'red')], [$descricao_evento] );
         
         $titulo_evento->addValidation( 'Titulo', new TRequiredValidator);
         
@@ -61,7 +71,7 @@ class EventosFormView extends TPage
     {
         try
         {
-            // open a transaction with database 'samples'
+            // open a transaction with database 
             TTransaction::open('test');
             
             $this->form->validate(); // run form validation
@@ -78,7 +88,7 @@ class EventosFormView extends TPage
             TTransaction::close();  // close the transaction
             
             // shows the success message
-            new TMessage('info', 'Record saved');
+            new TMessage('info', 'Evento criado com sucesso!');
         }
         catch (Exception $e) // in case of exception
         {
@@ -87,18 +97,5 @@ class EventosFormView extends TPage
             TTransaction::rollback(); // undo all pending operations
         }
     }
-    
-    /**
-     * Clear form
-     */
-    public function onClear()
-    {
-        $this->form->clear( TRUE );
-    }
-    
-    /**
-     * method onEdit()
-     * Executed whenever the user clicks at the edit button da datagrid
-     */
     
 }

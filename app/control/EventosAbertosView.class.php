@@ -23,11 +23,15 @@ class EventosAbertosView extends TStandardList
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
 
         $titulo_evento = new TDataGridColumn('titulo_evento', 'Evento', 'left', '30%');
-        $data_inicio   = new TDataGridColumn('data_inicio_evento', 'Data de Início', 'left', '30%');
+        $data_inicio   = new TDataGridColumn('data_inicio_evento', 'Data de Início', 'left', '30%'); 
         $gerente_evento = new TDataGridColumn('gerente_evento_name', 'Gerente do Evento', 'left', '30%');
+        $data_inicio->setTransformer(function($value, $object, $row) {
+            $date = new DateTime($value);
+            return $date->format('d/m/Y H:i');
+        });
 
         $this->datagrid->addColumn($titulo_evento);
-        $this->datagrid->addColumn($data_inicio);
+        $this->datagrid->addColumn($data_inicio); 
         $this->datagrid->addColumn($gerente_evento);
         
 
@@ -113,9 +117,4 @@ class EventosAbertosView extends TStandardList
         }
     }
 
-
-    public function clear()
-    {
-        $this->form->clear();
-    }
 }
