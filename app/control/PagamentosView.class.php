@@ -9,7 +9,7 @@
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    https://adiantiframework.com.br/license-tutor
  */
-class InscricoesView extends TPage
+class PagamentosView extends TPage
 {
     protected $form;     // registration form
     protected $datagrid; // listing
@@ -23,54 +23,57 @@ class InscricoesView extends TPage
         parent::__construct();
         
         $this->setDatabase('test');        // defines the database
-        $this->setActiveRecord('Inscricoes');       // defines the active record
-        $this->addFilterField('id_usuario', '=', 'id_usuario');
+        $this->setActiveRecord('Pagamentos');       // defines the active record
+        $this->addFilterField('id_pagamento', '=', 'id_pagamento');
         $this->addFilterField('id_evento', '=', 'id_evento');
-        $this->setDefaultOrder('id_inscricao', 'asc');  //acs or desc  // default orderine the default order
+        $this->addFilterField('id_usuario', '=', 'id_usuario');
+        $this->setDefaultOrder('id_pagamento', 'asc');  //acs or desc  // default orderine the default order
         
         // creates the form
-        $this->form = new BootstrapFormBuilder('form_search_Inscricoes');
-        $this->form->setFormTitle('Gerenciamento de Inscrições');
-
+        $this->form = new BootstrapFormBuilder('form_search_Pagamentos');
+        $this->form->setFormTitle('Gerenciamento de Pagamentos');
+        
         $id_evento = new TDBUniqueSearch('id_evento', 'test', 'Eventos', 'id_evento', 'titulo_evento');
         $id_usuario = new TDBUniqueSearch('id_usuario', 'test', 'SystemUser', 'id', 'name');
-        
+
         $this->form->addFields([new TLabel('Evento:', 'red')], [$id_evento]);
         $this->form->addFields([new TLabel('Usuário:', 'red')], [$id_usuario]);
-                
+
         // add form actions
         $this->form->addAction('Buscar', new TAction([$this, 'onSearch']), 'fa:search blue');
-        $this->form->addActionLink('Novo',  new TAction(['InscricoesFormView', 'onClear']), 'fa:plus-circle green');
+        $this->form->addActionLink('Novo',  new TAction(['PagamentosFormView', 'onClear']), 'fa:plus-circle green');
         $this->form->addActionLink('Limpar',  new TAction([$this, 'clear']), 'fa:eraser red');
         
         // keep the form filled with the search data
-        $this->form->setData( TSession::getValue('InscricoesView_filter_data') );
+        $this->form->setData( TSession::getValue('PagamentosView_filter_data') );
         
         // creates the DataGrid
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
         $this->datagrid->width = "100%";
-        $this->datagrid->id = 'inscricoes_datagrid';//para ajax
+        $this->datagrid->id = 'Pagamentos_datagrid';//para ajax
         
         // creates the datagrid columns
-        $id_evento    = new TDataGridColumn('id_inscricao', 'ID', 'left', '5%');
-        $id_usuario  = new TDataGridColumn('usuario', 'Nome', 'left', '40%');
+        $id_pagamento    = new TDataGridColumn('id_pagamento', 'ID', 'left', '5%');
+        $id_usuario  = new TDataGridColumn('usuario', 'Nome', 'left', '30%');
         $titulo_evento = new TDataGridColumn('evento', 'Evento', 'left', '30%');
-        $data_inscricao = new TDataGridColumn('data_inscricao', 'Data de Inscrição', 'center', '15%');
-        $status_inscricao = new TDataGridColumn('status_inscricao', 'Status', 'center', '10%');
-                
-        $this->datagrid->addColumn($id_evento);
+        $valor_evento = new TDataGridColumn('valor_evento', 'Valor', 'left', '5%');
+        $data_pagamento = new TDataGridColumn('data_pagamento', 'Data de Pagamento', 'center', '15%');
+        $status_pagamento = new TDataGridColumn('status_pagamento', 'Status', 'center', '10%');
+
+        $this->datagrid->addColumn($id_pagamento);
         $this->datagrid->addColumn($id_usuario);
         $this->datagrid->addColumn($titulo_evento);
-        $this->datagrid->addColumn($data_inscricao);
-        $this->datagrid->addColumn($status_inscricao);
+        $this->datagrid->addColumn($valor_evento);
+        $this->datagrid->addColumn($data_pagamento);
+        $this->datagrid->addColumn($status_pagamento);
 
-        $status_inscricao->setTransformer(function ($value, $object, $row) {
-            $label = ($value == 1) ? 'Confirmada' : 'Pendente';
+        $status_pagamento->setTransformer(function ($value, $object, $row) {
+            $label = ($value == 1) ? 'Confirmado' : 'Pendente';
             $color = ($value == 1) ? 'success' : 'danger';
 
-            $action = new TAction(['InscricoesView', 'onChangeStatus']);
-            $action->setParameter('key', $object->id_inscricao);
-            $action->setParameter('static', 'form_search_Inscricoes');
+            $action = new TAction(['PagamentosView', 'onChangeStatus']);
+            $action->setParameter('key', $object->id_pagamento);
+            $action->setParameter('static', 'form_search_Pagamentos');
 
             $link = $action->serialize(TRUE);
 
@@ -78,17 +81,14 @@ class InscricoesView extends TPage
                         <span class=\"btn btn-sm btn-{$color}\">{$label}</span>
                     </a>";
         });
-        
-        $data_inscricao->setTransformer(function($value, $object, $row) {
+
+        $data_pagamento->setTransformer(function($value, $object, $row) {
             $date = new DateTime($value);
             return $date->format('d/m/Y H:i');
         });
         
-        $id_evento->setAction( new TAction([$this, 'onReload']),   ['order' => 'id_evento']);
-        $id_usuario->setAction( new TAction([$this, 'onReload']), ['order' => 'id_usuario']);
-        
-        $action1 = new TDataGridAction(['InscricoesFormView', 'onEdit'], ['key' => '{id_inscricao}']);
-        $action2 = new TDataGridAction([$this, 'onDelete'], ['key' => '{id_inscricao}']);
+        $action1 = new TDataGridAction(['PagamentosFormView', 'onEdit'], ['key' => '{id_pagamento}']);
+        $action2 = new TDataGridAction([$this, 'onDelete'], ['key' => '{id_pagamento}']);
         
         $this->datagrid->addAction($action1, 'Edit',   'far:edit blue');
         $this->datagrid->addAction($action2, 'Delete', 'far:trash-alt red');
@@ -119,7 +119,7 @@ class InscricoesView extends TPage
         $this->clearFilters();
         $this->onReload();
     }
-    
+
     function onEdit($param)
     {
         try
@@ -128,7 +128,7 @@ class InscricoesView extends TPage
             {
                 $key = $param['id'];  // get the parameter
                 TTransaction::open('test');   // open a transaction with database 'samples'
-                $object = new Inscricoes($key);        // instantiates object City
+                $object = new Pagamentos($key);        // instantiates object City
                 $this->form->setData($object);   // fill the form with the active record data
                 TTransaction::close();           // close the transaction
             }
@@ -146,27 +146,22 @@ class InscricoesView extends TPage
 
     public static function onChangeStatus($param)
     {
+        //new TMessage('info', 'Entrou na ação!');
         try {
             TTransaction::open('test');
-            
+
             $pagamento = new Pagamentos($param['key']);
 
-            if ($pagamento->status_pagamento == 0) {
-                throw new Exception('Só é possível confirmar inscrições com pagamento aprovado.');
-            }else {
-                $inscricao = new Inscricoes($param['key']);
+            // Altera o status
+            $pagamento->status_pagamento = ($pagamento->status_pagamento == 1) ? 0 : 1;
+            $pagamento->store();
 
-                // Altera o status
-                $inscricao->status_inscricao = ($inscricao->status_inscricao == 1) ? 0 : 1;
-                $inscricao->store();
+            //TToast::show('success', 'Status alterado com sucesso');
 
-                TTransaction::close();
+            TTransaction::close();
 
-                // Recarrega a grid
-                TScript::create("__adianti_load_page('index.php?class=InscricoesView&method=onReloadManual');");
-            }
-
-            
+            // Recarrega a grid
+            TScript::create("__adianti_load_page('index.php?class=PagamentosView&method=onReloadManual');");
             
         } catch (Exception $e) {
             new TMessage('error', $e->getMessage());
@@ -181,7 +176,7 @@ class InscricoesView extends TPage
             TTransaction::open('test');
 
             // Cria o repositório e critério
-            $repository = new TRepository('Inscricoes');
+            $repository = new TRepository('Pagamentos');
             $limit = 10;
 
             $criteria = new TCriteria;
@@ -189,7 +184,7 @@ class InscricoesView extends TPage
             $criteria->setProperty('limit', $limit);
 
             // Filtros da sessão
-            $filter_data = TSession::getValue('InscricoesView_filter_data');
+            $filter_data = TSession::getValue('PagamentosView_filter_data');
 
             if (!empty($filter_data->id_usuario)) {
                 $criteria->add(new TFilter('id_usuario', '=', $filter_data->id_usuario));
@@ -200,19 +195,19 @@ class InscricoesView extends TPage
             }
 
             // Obtém objetos
-            $inscricoes = $repository->load($criteria, FALSE);
+            $Pagamentos = $repository->load($criteria, FALSE);
 
             $this->datagrid->clear();
 
-            if ($inscricoes)
+            if ($Pagamentos)
             {
-                foreach ($inscricoes as $inscricao)
+                foreach ($Pagamentos as $pagamento)
                 {
                     // Carrega os relacionamentos se necessário
-                    $inscricao->usuario = $inscricao->getUsuario()->name ?? ''; // ou use magic getter
-                    $inscricao->evento = $inscricao->getEvento()->titulo_evento ?? '';
+                    $pagamento->usuario = $pagamento->get_usuario()->name ?? ''; // ou use magic getter
+                    $pagamento->evento = $pagamento->get_evento()->titulo_evento ?? '';
 
-                    $this->datagrid->addItem($inscricao);
+                    $this->datagrid->addItem($pagamento);
                 }
             }
 
@@ -230,5 +225,5 @@ class InscricoesView extends TPage
             TTransaction::rollback();
         }
     }
-    
+
 }

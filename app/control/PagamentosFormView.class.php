@@ -9,7 +9,7 @@
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    https://adiantiframework.com.br/license-tutor
  */
-class InscricoesFormView extends TPage
+class PagamentosFormView extends TPage
 {
     protected $form; // form
     
@@ -21,55 +21,47 @@ class InscricoesFormView extends TPage
         parent::__construct();
         
         $this->setDatabase('test');    // defines the database
-        $this->setActiveRecord('Inscricoes');   // defines the active record
+        $this->setActiveRecord('Pagamentos');   // defines the active record
         
         // creates the form
-        $this->form = new BootstrapFormBuilder('form_Inscricoes');
-        $this->form->setFormTitle('Nova Inscrição');
+        $this->form = new BootstrapFormBuilder('form_Pagamentos');
+        $this->form->setFormTitle('Novo Pagamento');
         $this->form->setClientValidation(true);
         
         // create the form fields
-        $id       = new THidden('id_inscricao');
+        $id = new THidden('id_pagamento');
         $id->setEditable(FALSE);
+
         try {
             TTransaction::open('test');
 
-            $id_evento = new TDBUniqueSearch('id_evento', 'test', 'Eventos', 'id_evento', 'titulo_evento');
+            $evento = new TDBUniqueSearch('evento', 'test', 'Eventos', );
 
             TTransaction::close();
         } catch (Exception $e) {
             new TMessage('error', $e->getMessage());
         }
-        try {
-            TTransaction::open('test');
 
-            $id_usuario = new TDBUniqueSearch('id_usuario', 'test', 'SystemUser', 'id', 'name');
-
-            TTransaction::close();
-        } catch (Exception $e) {
-            new TMessage('error', $e->getMessage());
-        }
-        $data_inscricao = new TDate('data_inscricao');
-        $status_inscricao = new TCombo('status_inscricao');
-        $status_inscricao->addItems([
-            '1' => 'Confirmada',
+        $data_pagamento = new TDate('data_pagamento');
+        $status_pagamento = new TCombo('status_pagamento');
+        $status_pagamento->addItems([
+            '1' => 'Confirmado',
             '0' => 'Pendente'
         ]);
         
         // add the form fields
         $this->form->addFields( [$id] );
-        $this->form->addFields( [new TLabel('Evento', 'red')], [$id_evento] );
-        $this->form->addFields( [new TLabel('Usuário', 'red')], [$id_usuario] );
+        $this->form->addFields([new TLabel('Inscrição', 'red')], [$id_inscricao]);
         $this->form->addFields( 
-            [new TLabel('Data Inscrição', 'red')], [$data_inscricao],
-            [new TLabel('Status Inscrição', 'red')], [$status_inscricao]
+            [new TLabel('Data Pagamento', 'red')], [$data_pagamento],
+            [new TLabel('Status Pagamento', 'red')], [$status_pagamento]
         );
         
         
         // define the form action
         $this->form->addAction('Salvar', new TAction(array($this, 'onSave')), 'fa:save green');
         $this->form->addActionLink('Limpar',  new TAction(array($this, 'onClear')), 'fa:eraser red');
-        $this->form->addActionLink('Voltar',  new TAction(array('InscricoesView', 'onReload')), 'fa:table blue');
+        $this->form->addActionLink('Voltar',  new TAction(array('PagamentosView', 'onReload')), 'fa:table blue');
 
         // wrap the page content using vertical box
         $vbox = new TVBox;
@@ -91,7 +83,7 @@ class InscricoesFormView extends TPage
             
             $data = $this->form->getData(); // get form data as array
             
-            $object = new Inscricoes;  // create an empty object
+            $object = new Pagamentos;  // create an empty object
             $object->fromArray( (array) $data); // load the object with data
             $object->store(); // save the object
             
@@ -101,7 +93,7 @@ class InscricoesFormView extends TPage
             TTransaction::close();  // close the transaction
             
             // shows the success message
-            new TMessage('info', 'Inscrição criado com sucesso!');
+            new TMessage('info', 'Pagamento confirmado!');
         }
         catch (Exception $e) // in case of exception
         {

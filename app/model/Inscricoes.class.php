@@ -41,4 +41,9 @@ class Inscricoes extends TRecord
     {
         return new Eventos($this->id_evento);
     }
+
+    public function get_valor_evento()
+    {
+        return new Eventos($this->valor_evento);
+    }
 }

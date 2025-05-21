@@ -19,8 +19,7 @@ class Eventos extends TRecord
         parent::addAttribute('descricao_evento');
         parent::addAttribute('status_evento');
         parent::addAttribute('gerente_evento');
-        parent::addAttribute('id_evento');
-        
+        parent::addAttribute('valor_evento');
     }
 
     public function get_gerente_evento_name()

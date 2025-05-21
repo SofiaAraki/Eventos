@@ -26,48 +26,27 @@ class CertificadosFormView extends TPage
         $this->form->setClientValidation(true);
 
         $id_certificado = new THidden('id_certificado');
-        //$id_certificado->setEditable(FALSE);
-
         $id_evento = new TDBUniqueSearch('id_evento', 'test', 'Eventos', 'id_evento', 'titulo_evento');
         $titulo_certificado = new TEntry('titulo_certificado');
         $descricao_certificado = new TText('descricao_certificado');
         $data_emissao_certificado = new TDate('data_emissao_certificado');
         $carga_horaria_certificado = new TEntry('carga_horaria_certificado');
-        $carga_horaria_certificado->addValidation('Carga Horária', new TRequiredValidator);
-        $carga_horaria_certificado->addValidation('Carga Horária', new TNumericValidator);
-
-        $orientacao_pagina = new TCombo('orientacao_pagina');
-        $orientacao_pagina->addItems(['portrait' => 'Retrato', 'landscape' => 'Paisagem']);
-
-        $mostra_verso = new TCombo('mostra_verso');
-        $mostra_verso->addItems([0 => 'Não', 1 => 'Sim']);
-
         $bg_frente = new TFile('bg_frente');
-        $bg_verso = new TFile('bg_verso');
-
-        $margem_esquerda = new TSpinner('margem_esquerda');
-        $margem_direita = new TSpinner('margem_direita');
 
         $this->form->addFields([$id_certificado]);
         $this->form->addFields([new TLabel('Evento', 'red')], [$id_evento]);
-        $this->form->addFields([new TLabel('Título', 'red')], [$titulo_certificado]);
-        $this->form->addFields([new TLabel('Descrição', 'red')], [$descricao_certificado]); $descricao_certificado->setSize('100%', 300);
+        $this->form->addFields([new TLabel('Nome do Certificado', 'red')], [$titulo_certificado]);
         $this->form->addFields(
             [new TLabel('Data de Emissão', 'red')], [$data_emissao_certificado],
             [new TLabel('Carga Horária', 'red')], [$carga_horaria_certificado]);
         $this->form->addFields(
-            [new TLabel('Orientação', 'red')], [$orientacao_pagina], 
-            [new TLabel('Mostrar Verso', 'red')], [$mostra_verso]);
-        $this->form->addFields(
-            [new TLabel('Margem Esquerda', 'red')], [$margem_esquerda], 
-            [new TLabel('Margem Direita', 'red')], [$margem_direita]);
-        $this->form->addFields(
-            [new TLabel('Imagem de Fundo - Frente', 'red')], [$bg_frente], 
-            [new TLabel('Imagem de Fundo - Verso', 'red')], [$bg_verso]);
+            [new TLabel('Imagem de Fundo', 'red')], [$bg_frente]);
+        $this->form->addFields([new TLabel('Placeholder', 'red')], [$descricao_certificado]);
+        $descricao_certificado->setSize('100%', 200);
 
         $this->form->addAction('Salvar', new TAction([$this, 'onSave']), 'fa:save green');
         $this->form->addActionLink('Limpar', new TAction([$this, 'onClear']), 'fa:eraser red');
-        $this->form->addActionLink('Listar', new TAction(['CertificadosView', 'onReload']), 'fa:table blue');
+        $this->form->addActionLink('Voltar', new TAction(['CertificadosView', 'onReload']), 'fa:table blue');
 
         $vbox = new TVBox;
         $vbox->style = 'width: 100%';

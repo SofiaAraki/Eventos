@@ -29,34 +29,40 @@ class EventosFormView extends TPage
         $this->form->setClientValidation(true);
         
         // create the form fields
-        $id       = new THidden('id');
+        $id       = new THidden('id_evento');
         $id->setEditable(FALSE);
         $titulo_evento     = new TEntry('titulo_evento');
-        $data_inicio_evento     = new TDateTime('data_inicio_evento'); $data_inicio_evento->setMask('dd/mm/yyyy hh:ii');
-        $data_fim_evento     = new TDateTime('data_fim_evento'); $data_fim_evento->setMask('dd/mm/yyyy hh:ii');
+        $data_inicio_evento     = new TDateTime('data_inicio_evento'); //$data_inicio_evento->setMask('dd/mm/yyyy hh:ii');
+        $data_fim_evento     = new TDateTime('data_fim_evento'); //$data_fim_evento->setMask('dd/mm/yyyy hh:ii');
         $local_evento     = new TEntry('local_evento');
         $descricao_evento     = new TText('descricao_evento');
         $status_evento     = new TCombo('status_evento');
         $status_evento->addItems(['1' => 'Ativo', '0' => 'Inativo']);
+        $gerente_evento     = new THidden('gerente_evento');
+        $valor_evento = new TEntry('valor_evento');
         
 
         // add the form fields
         $this->form->addFields( [$id] );
         $this->form->addFields( [new TLabel('Evento', 'red')], [$titulo_evento] );
-        $this->form->addFields( [new TLabel('Local', 'red')], [$local_evento] );
+        $this->form->addFields( 
+            [new TLabel('Local', 'red')], [$local_evento],
+            [new TLabel('Status', 'red')], [$status_evento]
+        );
         $this->form->addFields( 
             [new TLabel('Data de Inicio', 'red')], [$data_inicio_evento],
             [new TLabel('Data de Fim', 'red')], [$data_fim_evento],
-            [new TLabel('Status', 'red')], [$status_evento]
+            [new TLabel('Valor da Inscrição', 'red')], [$valor_evento]
         );  
         $this->form->addFields( [new TLabel('Descrição', 'red')], [$descricao_evento] );
+        $this->form->addFields( [$gerente_evento] );
         
         $titulo_evento->addValidation( 'Titulo', new TRequiredValidator);
         
         // define the form action
-        $this->form->addAction('Save', new TAction(array($this, 'onSave')), 'fa:save green');
-        $this->form->addActionLink('Clear',  new TAction(array($this, 'onClear')), 'fa:eraser red');
-        $this->form->addActionLink('Listing',  new TAction(array('EventosView', 'onReload')), 'fa:table blue');
+        $this->form->addAction('Salvar', new TAction(array($this, 'onSave')), 'fa:save green');
+        $this->form->addActionLink('Limpar',  new TAction(array($this, 'onClear')), 'fa:eraser red');
+        $this->form->addActionLink('Voltar',  new TAction(array('EventosView', 'onReload')), 'fa:table blue');
 
         // wrap the page content using vertical box
         $vbox = new TVBox;
@@ -71,31 +77,47 @@ class EventosFormView extends TPage
     {
         try
         {
-            // open a transaction with database 
             TTransaction::open('test');
+
+            $login = TSession::getValue('login'); 
+            $user = SystemUser::newFromLogin($login); 
+            $gerente_id = $user->id; 
             
-            $this->form->validate(); // run form validation
+            $this->form->validate();
+            $data = $this->form->getData();
+
+            $data->gerente_evento = $gerente_id;
+
+            // usa o ID para carregar ou criar
+            $object = new Eventos($data->id_evento ?? null); // aqui é importante
+            $object->fromArray((array) $data);
+            $object->store();
             
-            $data = $this->form->getData(); // get form data as array
-            
-            $object = new Eventos;  // create an empty object
-            $object->fromArray( (array) $data); // load the object with data
-            $object->store(); // save the object
-            
-            // fill the form with the active record data
             $this->form->setData($object);
-            
-            TTransaction::close();  // close the transaction
-            
-            // shows the success message
-            new TMessage('info', 'Evento criado com sucesso!');
+            TTransaction::close();
+
+            new TMessage('info', 'Evento salvo com sucesso!');
         }
-        catch (Exception $e) // in case of exception
+        catch (Exception $e)
         {
-            new TMessage('error', $e->getMessage()); // shows the exception error message
-            $this->form->setData( $this->form->getData() ); // keep form data
-            TTransaction::rollback(); // undo all pending operations
+            new TMessage('error', $e->getMessage());
+            $this->form->setData($this->form->getData());
+            TTransaction::rollback();
         }
     }
+
+    public function onEdit($param)
+    {
+        try {
+            TTransaction::open('test');
+            $object = new Eventos($param['id_evento']);
+            $this->form->setData($object);
+            TTransaction::close();
+        } catch (Exception $e) {
+            new TMessage('error', $e->getMessage());
+            TTransaction::rollback();
+        }
+    }
+
     
 }

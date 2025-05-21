@@ -35,9 +35,9 @@ class CertificadosView extends TPage
         $this->form->addFields( [new TLabel('Modelo:', 'red')], [$titulo_certificado] );
                 
         // add form actions
-        $this->form->addAction('Find', new TAction([$this, 'onSearch']), 'fa:search blue');
-        $this->form->addActionLink('New',  new TAction(['CertificadosFormView', 'onClear']), 'fa:plus-circle green');
-        $this->form->addActionLink('Clear',  new TAction([$this, 'clear']), 'fa:eraser red');
+        $this->form->addAction('Buscar', new TAction([$this, 'onSearch']), 'fa:search blue');
+        $this->form->addActionLink('Novo',  new TAction(['CertificadosFormView', 'onClear']), 'fa:plus-circle green');
+        $this->form->addActionLink('Limpar',  new TAction([$this, 'clear']), 'fa:eraser red');
         
         // keep the form filled with the search data
         $this->form->setData( TSession::getValue('CertificadosView_filter_data') );

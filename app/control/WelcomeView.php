@@ -28,3 +28,19 @@ class WelcomeView extends TPage
         parent::add( $this->html );
     }
 }
+
+
+    // public function delete($id = NULL)
+    // {
+    //     $id = $id ?? $this->id_inscricao;
+
+    //     // Exclui todos os pagamentos relacionados
+    //     $pagamentos = Pagamentos::where('id_inscricao', '=', $id)->load();
+
+    //     foreach ($pagamentos as $pagamento) {
+    //         $pagamento->delete();
+    //     }
+
+    //     // Agora exclui a inscrição normalmente
+    //     parent::delete($id);
+    // }

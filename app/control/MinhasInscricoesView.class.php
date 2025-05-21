@@ -24,7 +24,7 @@ class MinhasInscricoesView extends TStandardList
 
         $titulo_evento = new TDataGridColumn('evento', 'Evento', 'center', '40%');
         $data_inscricao   = new TDataGridColumn('data_inscricao', 'Data de Inscrição', 'center', '30%');
-        $status_inscricao = new TDataGridColumn('status_inscricao', 'Presença', 'center', '20%');
+        $status_inscricao = new TDataGridColumn('status_inscricao', 'Status', 'center', '20%');
 
         $this->datagrid->addColumn($titulo_evento);
         $this->datagrid->addColumn($data_inscricao);
@@ -42,11 +42,14 @@ class MinhasInscricoesView extends TStandardList
             }
         });
 
-        $action1 = new TDataGridAction([$this, 'EmitirCertificado'], ['id_inscricao' => '{id_inscricao}']);
-        $action1->setUseButton(TRUE);
-        $action1->setField('id_inscricao');
-        $this->datagrid->addAction($action1, 'Emitir Certificado', 'fa:certificate blue');
-        
+        $action = new TDataGridAction([$this, 'onEmitirCertificado'], ['id_inscricao' => '{id_inscricao}']);
+        $action->setUseButton(true);
+        $action->setButtonClass('btn btn-default');
+        $action->setLabel('Emitir Certificado');
+        $action->setImage('fa:certificate blue');
+
+        $this->datagrid->addAction($action);
+
         $this->datagrid->createModel();
 
         $panel = new TPanelGroup('Minhas Inscrições');
@@ -87,48 +90,37 @@ class MinhasInscricoesView extends TStandardList
         }
     }
 
-    public function EmitirCertificado($param)
-    {
-        try {
-            TTransaction::open('test');
-
-            $inscricao = new Inscricoes($param['id_inscricao']);
-
-            if (!$inscricao) {
-                throw new Exception('Inscrição não encontrada!');
-            }
-
-            if ($inscricao->status_inscricao != 1) {
-                throw new Exception("Certificado só disponível para inscrições confirmadas.");
-            }
-
-            // Usa o objeto TRecord diretamente
-            $html = new AdiantiHTMLDocumentParser('app/resources/certificado.html', 'A4', 'landscape');
-            $html->setMaster($inscricao); 
-            $html->process();
-
-            $contents = $html->getContents();
-
-            $dompdf = new \Dompdf\Dompdf();
-            $dompdf->loadHtml($contents);
-            $dompdf->setPaper('A4', 'landscape');
-            $dompdf->render();
-
-            $output_file = 'tmp/certificado.pdf';
-            file_put_contents($output_file, $dompdf->output());
-
-            parent::openFile($output_file);
-
-            TTransaction::close();
-        } catch (Exception $e) {
-            new TMessage('error', $e->getMessage());
-            TTransaction::rollback();
-        }
-    }
-
     public function show()
     {
         $this->onReload();
         parent::show();
     }
+
+    public function onEmitirCertificado($param)
+    {   
+        TTransaction::open('test');
+        
+        $inscricao = new Inscricoes($param['id_inscricao']);
+
+        if ($inscricao->status_inscricao != 1) {
+            new TMessage('warning', 'O certificado estará disponível apenas após a confirmação da sua inscrição.');
+            return;
+        }
+
+        TTransaction::close();
+
+        try {
+            $id = isset($param['id_inscricao']) ? (int) $param['id_inscricao'] : null;
+
+            if ($id > 0) {
+                $url = "index.php?class=EmitirCertificados&id_inscricao={$id}";
+                TScript::create("window.open('{$url}', '_blank');");
+            } else {
+                throw new Exception('Inscrição não encontrada.');
+            }
+        } catch (Exception $e) {
+            new TMessage('error', $e->getMessage());
+        }
+    }
+
 }

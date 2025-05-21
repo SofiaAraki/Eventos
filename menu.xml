@@ -9,10 +9,6 @@
                 <icon></icon>
                 <action>MinhasInscricoesView</action>
             </menuitem>
-            <menuitem>
-                <icon></icon>
-                <action>MeusCertificadosView</action>
-            </menuitem>
         </menu>
     </menuitem>
 
@@ -34,10 +30,6 @@
                 <icon></icon>
                 <action>InscricoesFormView</action>
             </menuitem>
-            <menuitem>
-                <icon></icon>
-                <action>InscricoesCheckoutFormView</action>
-            </menuitem>
             <menuitem label='Certificados'>
                 <icon></icon>
                 <action>CertificadosView</action>
@@ -48,7 +40,15 @@
             </menuitem>
             <menuitem>
                 <icon></icon>
-                <action>CertificadoHtmlPdfView</action>
+                <action>EmitirCertificados</action>
+            </menuitem>
+            <menuitem label='Pagamentos'>
+                <icon></icon>
+                <action>PagamentosView</action>
+            </menuitem>
+            <menuitem>
+                <icon></icon>
+                <action>PagamentosFormView</action>
             </menuitem>
         </menu>
     </menuitem>

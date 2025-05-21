@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "abe3b43b13c14b6d100ea96f3f084b06",
+    "content-hash": "9fb62135b99eeb50e66e151572ac7f7a",
     "packages": [
         {
             "name": "adianti/barcode-document",

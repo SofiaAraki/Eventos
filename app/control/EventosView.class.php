@@ -35,9 +35,9 @@ class EventosView extends TPage
         $this->form->addFields( [new TLabel('Evento:', 'red')], [$titulo_evento] );
                 
         // add form actions
-        $this->form->addAction('Find', new TAction([$this, 'onSearch']), 'fa:search blue');
-        $this->form->addActionLink('New',  new TAction(['EventosFormView', 'onClear']), 'fa:plus-circle green');
-        $this->form->addActionLink('Clear',  new TAction([$this, 'clear']), 'fa:eraser red');
+        $this->form->addAction('Buscar', new TAction([$this, 'onSearch']), 'fa:search blue');
+        $this->form->addActionLink('Novo',  new TAction(['EventosFormView', 'onClear']), 'fa:plus-circle green');
+        $this->form->addActionLink('Limpar',  new TAction([$this, 'clear']), 'fa:eraser red');
         
         // keep the form filled with the search data
         $this->form->setData( TSession::getValue('EventosView_filter_data') );
@@ -51,6 +51,7 @@ class EventosView extends TPage
         $titulo_evento  = new TDataGridColumn('titulo_evento', 'Evento', 'left', '30%');
         $data_inicio_evento = new TDataGridColumn('data_inicio_evento', 'Data de Inicio', 'center', '15%');
         $data_fim_evento = new TDataGridColumn('data_fim_evento', 'Data de Fim', 'center', '15%');
+        $valor_evento = new TDataGridColumn('valor_evento', 'Valor', 'center', '5%');
         $status_evento = new TDataGridColumn('status_evento', 'Status', 'center', '10%');
         $gerente_evento = new TDataGridColumn('gerente_evento_name', 'Gerente', 'left', '30%');
                 
@@ -58,6 +59,7 @@ class EventosView extends TPage
         $this->datagrid->addColumn($titulo_evento);
         $this->datagrid->addColumn($data_inicio_evento);
         $this->datagrid->addColumn($data_fim_evento);
+        $this->datagrid->addColumn($valor_evento);
         $this->datagrid->addColumn($status_evento);
         $this->datagrid->addColumn($gerente_evento);
 
@@ -119,9 +121,9 @@ class EventosView extends TPage
     {
         try
         {
-            if (isset($param['id']))
+            if (isset($param['id_evento']))
             {
-                $key = $param['id'];  // get the parameter
+                $key = $param['id_evento'];  // get the parameter
                 TTransaction::open('test');   // open a transaction with database 'samples'
                 $object = new Eventos($key);        // instantiates object City
                 $this->form->setData($object);   // fill the form with the active record data

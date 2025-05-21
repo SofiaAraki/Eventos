@@ -27,14 +27,22 @@ CREATE TABLE certificados (
     descricao_certificado TEXT,
     data_emissao_certificado DATETIME DEFAULT CURRENT_TIMESTAMP,
     bg_frente VARCHAR(255),
-    bg_verso VARCHAR(255),
-    orientacao_pagina VARCHAR(20) DEFAULT 'landscape',
-    mostra_verso TINYINT(1) DEFAULT 0,
-    margem_esquerda INT DEFAULT 20,
-    margem_direita INT DEFAULT 20,
     carga_horaria_certificado INT DEFAULT 0,
     FOREIGN KEY (id_evento) REFERENCES eventos(id_evento)
 );
+
+ALTER TABLE eventos ADD valor_inscricao DECIMAL(10,2) NOT NULL DEFAULT 0.00;
+
+CREATE TABLE pagamentos (
+    id_pagamento INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_inscricao INT NOT NULL,
+    status_pagamento TINYINT(1) NOT NULL DEFAULT 0,
+    data_pagamento DATETIME DEFAULT CURRENT_TIMESTAMP,    
+    FOREIGN KEY (id_inscricao) REFERENCES inscricoes(id)
+);
+
+
+
 
 INSERT INTO eventos (
     titulo_evento,
@@ -63,11 +71,6 @@ INSERT INTO certificados (
     descricao_certificado,
     data_emissao_certificado,
     bg_frente,
-    bg_verso,
-    orientacao_pagina,
-    mostra_verso,
-    margem_esquerda,
-    margem_direita,
     carga_horaria_certificado
 ) VALUES (
     1, -- ID do evento
@@ -75,10 +78,28 @@ INSERT INTO certificados (
     'Certificamos que o(a) participante participou do evento com êxito.',
     NOW(), -- Data de emissão
     'certificado_frente.jpg',
-    'certificado_verso.jpg',
-    'landscape', -- ou 'portrait'
-    1, -- Mostrar verso: 1 para sim, 0 para não
-    30, -- margem esquerda
-    30, -- margem direita
     8   -- carga horária
 );
+
+
+
+ALTER TABLE certificados
+ADD CONSTRAINT fk_certificados_eventos
+FOREIGN KEY (id_evento)
+REFERENCES eventos(id_evento)
+ON DELETE CASCADE;
+
+
+ALTER TABLE inscricoes
+ADD CONSTRAINT fk_inscricoes_eventos
+FOREIGN KEY (id_evento)
+REFERENCES eventos(id_evento)
+ON DELETE CASCADE;
+
+
+ALTER TABLE pagamentos
+ADD CONSTRAINT fk_pagamentos_inscricoes
+FOREIGN KEY (id_inscricao)
+REFERENCES inscricoes(id_inscricao)
+ON DELETE CASCADE;
+
