@@ -32,15 +32,11 @@ class PagamentosFormView extends TPage
         $id = new THidden('id_pagamento');
         $id->setEditable(FALSE);
 
-        try {
-            TTransaction::open('test');
-
-            $evento = new TDBUniqueSearch('evento', 'test', 'Eventos', );
-
-            TTransaction::close();
-        } catch (Exception $e) {
-            new TMessage('error', $e->getMessage());
-        }
+        // Campo de seleção de inscrição (relacionado com evento e usuário)
+        $id_inscricao = new TDBUniqueSearch('id_inscricao', 'test', 'Inscricoes', 'id_inscricao', 'id_inscricao');
+        $id_inscricao->setMinLength(1);
+        $id_inscricao->setMask('{id_inscricao}');
+        $id_inscricao->setSize('100%');
 
         $data_pagamento = new TDate('data_pagamento');
         $status_pagamento = new TCombo('status_pagamento');

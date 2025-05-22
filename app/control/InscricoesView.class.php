@@ -149,12 +149,13 @@ class InscricoesView extends TPage
         try {
             TTransaction::open('test');
             
-            $pagamento = new Pagamentos($param['key']);
+            $pagamento = Pagamentos::where('id_inscricao', '=', $param['key'])->first();
 
             if ($pagamento->status_pagamento == 0) {
-                throw new Exception('Só é possível confirmar inscrições com pagamento aprovado.');
+                new TMessage('warning', 'Só é possível confirmar inscrições com pagamento aprovado.');
             }else {
-                $inscricao = new Inscricoes($param['key']);
+
+                $inscricao = new Inscricoes($pagamento->id_inscricao);
 
                 // Altera o status
                 $inscricao->status_inscricao = ($inscricao->status_inscricao == 1) ? 0 : 1;

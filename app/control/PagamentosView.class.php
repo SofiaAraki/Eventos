@@ -124,9 +124,9 @@ class PagamentosView extends TPage
     {
         try
         {
-            if (isset($param['id']))
+            if (isset($param['id_pagamento']))
             {
-                $key = $param['id'];  // get the parameter
+                $key = $param['id_pagamento'];  // get the parameter
                 TTransaction::open('test');   // open a transaction with database 'samples'
                 $object = new Pagamentos($key);        // instantiates object City
                 $this->form->setData($object);   // fill the form with the active record data
@@ -155,8 +155,6 @@ class PagamentosView extends TPage
             // Altera o status
             $pagamento->status_pagamento = ($pagamento->status_pagamento == 1) ? 0 : 1;
             $pagamento->store();
-
-            //TToast::show('success', 'Status alterado com sucesso');
 
             TTransaction::close();
 

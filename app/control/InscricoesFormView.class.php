@@ -84,32 +84,38 @@ class InscricoesFormView extends TPage
     {
         try
         {
-            // open a transaction with database 'samples'
             TTransaction::open('test');
             
-            $this->form->validate(); // run form validation
+            $this->form->validate();
+            $data = $this->form->getData();
+
+            // Cria a inscrição
+            $inscricao = new Inscricoes;
+            $inscricao->fromArray( (array) $data );
+            $inscricao->store(); // grava e gera o ID da inscrição
+
+            // Cria o pagamento vinculado
+            $pagamento = new Pagamentos;
+            $pagamento->id_inscricao = $inscricao->id_inscricao;
+            $pagamento->status_pagamento = '0'; // Pendente por padrão
+            $pagamento->data_pagamento = null;  // ou date('Y-m-d') se quiser registrar a tentativa
+            $pagamento->store();
+
+            // Preenche o formulário com os dados atualizados
+            $this->form->setData($inscricao);
+
+            TTransaction::close();
             
-            $data = $this->form->getData(); // get form data as array
-            
-            $object = new Inscricoes;  // create an empty object
-            $object->fromArray( (array) $data); // load the object with data
-            $object->store(); // save the object
-            
-            // fill the form with the active record data
-            $this->form->setData($object);
-            
-            TTransaction::close();  // close the transaction
-            
-            // shows the success message
-            new TMessage('info', 'Inscrição criado com sucesso!');
+            new TMessage('info', 'Inscrição criada com sucesso!');
         }
-        catch (Exception $e) // in case of exception
+        catch (Exception $e)
         {
-            new TMessage('error', $e->getMessage()); // shows the exception error message
-            $this->form->setData( $this->form->getData() ); // keep form data
-            TTransaction::rollback(); // undo all pending operations
+            new TMessage('error', $e->getMessage());
+            $this->form->setData( $this->form->getData() );
+            TTransaction::rollback();
         }
     }
+
     
     /**
      * Clear form

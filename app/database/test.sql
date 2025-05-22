@@ -6,6 +6,7 @@ CREATE TABLE eventos (
     local_evento VARCHAR(255) NOT NULL,
     descricao_evento TEXT,
     status_evento TINYINT(1) NOT NULL DEFAULT 1,
+    valor_evento DECIMAL(10,2) DEFAULT 0.00,
     gerente_evento INT,
     FOREIGN KEY (gerente_evento) REFERENCES system_users(id)
 );
@@ -31,8 +32,6 @@ CREATE TABLE certificados (
     FOREIGN KEY (id_evento) REFERENCES eventos(id_evento)
 );
 
-ALTER TABLE eventos ADD valor_inscricao DECIMAL(10,2) NOT NULL DEFAULT 0.00;
-
 CREATE TABLE pagamentos (
     id_pagamento INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     id_inscricao INT NOT NULL,
@@ -41,9 +40,6 @@ CREATE TABLE pagamentos (
     FOREIGN KEY (id_inscricao) REFERENCES inscricoes(id)
 );
 
-
-
-
 INSERT INTO eventos (
     titulo_evento,
     data_inicio_evento,
@@ -51,36 +47,34 @@ INSERT INTO eventos (
     local_evento,
     descricao_evento,
     status_evento,
-    gerente_evento
+    gerente_evento,
+    valor_evento
 ) VALUES (
     'Workshop de PHP',
     '2025-06-01 09:00:00',
-    '2025-06-01 17:00:00',
+    '2025-06-10 17:00:00',
     'Auditório Principal',
     'Evento focado em boas práticas com PHP moderno.',
     1,
-    1
+    1,
+    100.00
 );
 
-INSERT INTO inscricoes (data_inscricao, id_usuario, id_evento)
-VALUES ('2025-05-17 14:30:00', 3, 1);
-
-INSERT INTO certificados (
+INSERT into certificados (
     id_evento,
-    titulo_certificado,
-    descricao_certificado,
-    data_emissao_certificado,
-    bg_frente,
+    titulo_certificado, 
+    descricao_certificado, 
+    data_emissao_certificado, 
+    bg_frente, 
     carga_horaria_certificado
-) VALUES (
-    1, -- ID do evento
-    'Certificado de Participação',
-    'Certificamos que o(a) participante participou do evento com êxito.',
-    NOW(), -- Data de emissão
-    'certificado_frente.jpg',
-    8   -- carga horária
+    ) VALUES (
+    1, 
+    'Certificado de PHP', 
+    'A instituição, pelo presente, certifica que {nome}, portador(a) do RG: {rg}, participou do "{titulo_evento}", realizado {data_inicio_evento}, com carga horária equivalente a {carga_horaria_evento} horas.{data_emissao_certificado}.', 
+    '2025-06-10 17:00:00', 
+    'bg_frente.png', 
+    80
 );
-
 
 
 ALTER TABLE certificados
@@ -89,13 +83,11 @@ FOREIGN KEY (id_evento)
 REFERENCES eventos(id_evento)
 ON DELETE CASCADE;
 
-
 ALTER TABLE inscricoes
 ADD CONSTRAINT fk_inscricoes_eventos
 FOREIGN KEY (id_evento)
 REFERENCES eventos(id_evento)
 ON DELETE CASCADE;
-
 
 ALTER TABLE pagamentos
 ADD CONSTRAINT fk_pagamentos_inscricoes

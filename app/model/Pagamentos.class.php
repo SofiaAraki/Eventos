@@ -46,5 +46,5 @@ class Pagamentos extends TRecord
         return '-';
     }
 
-
+    
 }
