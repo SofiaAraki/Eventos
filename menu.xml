@@ -1,5 +1,6 @@
 <menu>
     <menuitem label='Participante'>
+        <icon>fas:user fa-fw</icon>
         <menu>
             <menuitem label='Eventos Abertos'>
                 <icon></icon>
@@ -13,6 +14,8 @@
     </menuitem>
 
     <menuitem label='Gerente'>
+        <icon>fas:cog fa-fw</icon>
+        <Access></Access>
         <menu>
             <menuitem label='Eventos'>
                 <icon></icon>

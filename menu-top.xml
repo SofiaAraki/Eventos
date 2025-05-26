@@ -1,5 +1,5 @@
 <menu>
-    <menuitem label="Shortcut">
+    <!-- <menuitem label="Shortcut">
         <icon>fas:bolt fa-fw</icon>
         <mobile>N</mobile>
         <menu>
@@ -10,5 +10,5 @@
               <mobile>N</mobile>
             </menuitem>
         </menu>
-    </menuitem>
+    </menuitem> -->
 </menu>

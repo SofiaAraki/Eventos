@@ -60,14 +60,14 @@ return [
     ],
     'template' => [
         'navbar' => [
-            'has_program_search' => '1',
-            'has_notifications' => '1',
-            'has_messages' => '1',
-            'has_docs' => '1',
-            'has_contacts' => '1',
-            'has_support_form' => '1',
-            'has_wiki' => '1',
-            'has_news' => '1',
+            // 'has_program_search' => '1',
+            // 'has_notifications' => '1',
+            // 'has_messages' => '1',
+            // 'has_docs' => '1',
+            // 'has_contacts' => '1',
+            // 'has_support_form' => '1',
+            // 'has_wiki' => '1',
+            // 'has_news' => '1',
             'has_menu_mode_switch' => '1',
             'has_main_mode_switch' => '1'
         ],

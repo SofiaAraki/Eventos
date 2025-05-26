@@ -60,6 +60,7 @@ class EmitirCertificados extends TPage
                 '{rg}' => htmlspecialchars($inscricao->rg ?? ''),
                 '{titulo_evento}' => htmlspecialchars($evento->titulo_evento ?? ''),
                 '{data_inicio_evento}' => formatar_data_extenso($evento->data_inicio_evento ?? ''),
+                '{data_fim_evento}' => formatar_data_extenso($evento->data_fim_evento ?? ''),
                 '{carga_horaria_evento}' => $certificado->carga_horaria_certificado ?? '',
                 '{data_emissao_certificado}' => '<br><br><br><br>Ituverava, ' .formatar_data_extenso($certificado->data_emissao_certificado ?? '')
 
