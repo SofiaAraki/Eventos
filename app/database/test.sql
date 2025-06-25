@@ -13,6 +13,7 @@ CREATE TABLE eventos (
 
 CREATE TABLE inscricoes (
     id_inscricao INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    tipo_participacao ENUM('aluno', 'banca', 'orientador', 'palestrante', 'autor') DEFAULT 'aluno',
     data_inscricao DATETIME NOT NULL,
     id_usuario INT NOT NULL,
     id_evento INT NOT NULL,
@@ -23,6 +24,7 @@ CREATE TABLE inscricoes (
 
 CREATE TABLE certificados (
     id_certificado INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    tipo_certificado ENUM('aluno', 'banca', 'orientador', 'palestrante', 'autor') DEFAULT 'aluno',
     id_evento INT NOT NULL,
     titulo_certificado VARCHAR(255) NOT NULL,
     descricao_certificado TEXT,
@@ -40,41 +42,43 @@ CREATE TABLE pagamentos (
     FOREIGN KEY (id_inscricao) REFERENCES inscricoes(id)
 );
 
-INSERT INTO eventos (
-    titulo_evento,
-    data_inicio_evento,
-    data_fim_evento,
-    local_evento,
-    descricao_evento,
-    status_evento,
-    gerente_evento,
-    valor_evento
-) VALUES (
-    'Workshop de PHP',
-    '2025-06-01 09:00:00',
-    '2025-06-10 17:00:00',
-    'Auditório Principal',
-    'Evento focado em boas práticas com PHP moderno.',
-    1,
-    1,
-    100.00
+CREATE TABLE registros (
+    id_registro INT PRIMARY KEY AUTO_INCREMENT,
+    id_inscricao INT NOT NULL,
+    tipo_certificado ENUM('aluno', 'banca', 'orientador', 'palestrante', 'autor') NOT NULL,
+    descricao_certificado TEXT NULL,
+    data_emissao DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_inscricao) REFERENCES inscricoes(id_inscricao)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
-INSERT into certificados (
-    id_evento,
-    titulo_certificado, 
-    descricao_certificado, 
-    data_emissao_certificado, 
-    bg_frente, 
-    carga_horaria_certificado
-    ) VALUES (
-    1, 
-    'Certificado de PHP', 
-    'A instituição, pelo presente, certifica que {nome}, portador(a) do RG: {rg}, participou do "{titulo_evento}", realizado {data_inicio_evento}, com carga horária equivalente a {carga_horaria_evento} horas.{data_emissao_certificado}.', 
-    '2025-06-10 17:00:00', 
-    'bg_frente.png', 
-    80
+CREATE TABLE tccs (
+    id_tcc INT AUTO_INCREMENT PRIMARY KEY,
+    id_evento INT NOT NULL,
+    titulo_tcc VARCHAR(255) NOT NULL,
+    data_tcc DATE NOT NULL,
+    id_orientador INT NULL,
+    FOREIGN KEY (id_evento) REFERENCES eventos(id_evento) ON DELETE CASCADE,
+    FOREIGN KEY (id_orientador) REFERENCES system_users(id) ON DELETE SET NULL
 );
+
+CREATE TABLE autores (
+    id_autor INT AUTO_INCREMENT PRIMARY KEY,
+    id_tcc INT NOT NULL,
+    autor INT NOT NULL,
+    FOREIGN KEY (id_tcc) REFERENCES tccs(id_tcc) ON DELETE CASCADE,
+    FOREIGN KEY (autor) REFERENCES system_users(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE banca (
+    id_banca INT AUTO_INCREMENT PRIMARY KEY,
+    id_tcc INT NOT NULL,
+    banca INT NOT NULL,
+    FOREIGN KEY (id_tcc) REFERENCES tccs(id_tcc) ON DELETE CASCADE,
+    FOREIGN KEY (banca) REFERENCES system_users(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 
 
 ALTER TABLE certificados

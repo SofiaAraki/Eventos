@@ -41,6 +41,9 @@ class LoginForm extends TPage
         $previous_method     = new THidden('previous_method');
         $previous_parameters = new THidden('previous_parameters');
         
+        $login->setMask('999.999.999-99');
+        $login->placeholder = 'CPF';
+        
         $login->disableAutoComplete();
         $password->disableAutoComplete();
         $login->setSize('100%');

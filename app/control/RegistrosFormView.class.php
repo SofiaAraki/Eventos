@@ -9,7 +9,7 @@
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    https://adiantiframework.com.br/license-tutor
  */
-class CertificadosFormView extends TPage
+class RegistrosFormView extends TPage
 {
     protected $form;
     use Adianti\Base\AdiantiStandardFormTrait;
@@ -19,39 +19,33 @@ class CertificadosFormView extends TPage
         parent::__construct();
 
         $this->setDatabase('test');
-        $this->setActiveRecord('Certificados');
+        $this->setActiveRecord('Registros');
 
-        $this->form = new BootstrapFormBuilder('form_Certificados');
-        $this->form->setFormTitle('Modelo de Certificado');
+        $this->form = new BootstrapFormBuilder('form_Registros');
+        $this->form->setFormTitle('Registro de Certificado');
         $this->form->setClientValidation(true);
 
-        $id_certificado = new THidden('id_certificado');
-        $id_evento = new TDBUniqueSearch('id_evento', 'test', 'Eventos', 'id_evento', 'titulo_evento');
-        $titulo_certificado = new TEntry('titulo_certificado');
-        $data_emissao_certificado = new TDate('data_emissao_certificado');
-        $carga_horaria_certificado = new TEntry('carga_horaria_certificado');
-        $bg_frente = new TFile('bg_frente');
+        $id_registro = new THidden('id_registro');
+        $id_evento = new Thidden('id_evento');
+        $descricao_certificado = new TText('descricao_certificado');
         $tipo_certificado = new TCombo('tipo_certificado');
         $tipo_certificado->addItems([
             'aluno'      => 'Aluno',
             'banca'      => 'Banca',
             'orientador' => 'Orientador',
             'palestrante'=> 'Palestrante',
+            'autor'      => 'Autor'
         ]);
         
-        $this->form->addFields([$id_certificado]);
-        $this->form->addFields([new TLabel('Evento', 'red')], [$id_evento]);
-        $this->form->addFields([new TLabel('Nome do Certificado', 'red')], [$titulo_certificado]);
-        $this->form->addFields(
-            [new TLabel('Data de Emissão', 'red')], [$data_emissao_certificado],
-            [new TLabel('Carga Horária', 'red')], [$carga_horaria_certificado]);
-        $this->form->addFields(
-            [new TLabel('Imagem de Fundo', 'red')], [$bg_frente],
-            [new TLabel('Tipo do Certificado', 'red')], [$tipo_certificado]);
+        $this->form->addFields([$id_registro]);
+        $this->form->addFields([$id_evento]);
+        $this->form->addFields([new TLabel('Tipo do Certificado', 'red')], [$tipo_certificado]);
+        $this->form->addFields([new TLabel('Placeholder', 'red')], [$descricao_certificado]);
+        $descricao_certificado->setSize('100%', 200);
 
         $this->form->addAction('Salvar', new TAction([$this, 'onSave']), 'fa:save green');
         $this->form->addActionLink('Limpar', new TAction([$this, 'onClear']), 'fa:eraser red');
-        $this->form->addActionLink('Voltar', new TAction(['CertificadosView', 'onReload']), 'fa:table blue');
+        $this->form->addActionLink('Voltar', new TAction(['RegistrosView', 'onReload']), 'fa:table blue');
 
         $vbox = new TVBox;
         $vbox->style = 'width: 100%';
@@ -70,11 +64,11 @@ class CertificadosFormView extends TPage
             $data = $this->form->getData();    
 
             // Carrega ou cria novo objeto com base no id
-            if (!empty($data->id_certificado)) {
-                $object = new Certificados($data->id_certificado); // EDITAR
+            if (!empty($data->id_registro)) {
+                $object = new Registros($data->id_registro); // EDITAR
                 new TMessage('info', 'Certificado atualizado com sucesso!');
             } else {
-                $object = new Certificados;                        // INSERIR
+                $object = new Registros;                        // INSERIR
                 new TMessage('info', 'Certificado criado com sucesso!');
 
             }

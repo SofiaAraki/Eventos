@@ -50,22 +50,23 @@ class CertificadosView extends TPage
         $id_certificado    = new TDataGridColumn('id_certificado', 'ID', 'left', '5%');
         $titulo_certificado  = new TDataGridColumn('titulo_certificado', 'Modelo', 'center', '30%');
         $data_emissao_certificado = new TDataGridColumn('data_emissao_certificado', 'Data de Emissão', 'center', '15%');
-        $id_evento = new TDataGridColumn('evento', 'Evento', 'center', '40%');
+        $id_evento = new TDataGridColumn('evento', 'Evento', 'center', '30%');
         $carga_horaria_certificado = new TDataGridColumn('carga_horaria_certificado', 'Carga Horária', 'center', '10%');
+        $tipo_certificado = new TDataGridColumn('tipo_certificado', 'Tipo', 'center', '10%');
                 
         $this->datagrid->addColumn($id_certificado);
         $this->datagrid->addColumn($titulo_certificado);
         $this->datagrid->addColumn($data_emissao_certificado);
         $this->datagrid->addColumn($id_evento);
         $this->datagrid->addColumn($carga_horaria_certificado);
+        $this->datagrid->addColumn($tipo_certificado);
         
         $data_emissao_certificado->setTransformer(function($value, $object, $row) {
             $date = new DateTime($value);
             return $date->format('d/m/Y H:i');
         });
 
-        $id_certificado->setAction( new TAction([$this, 'onReload']),   ['order' => 'id_certificado']);
-        $titulo_certificado->setAction( new TAction([$this, 'onReload']), ['order' => 'titulo_certificado']);
+        $data_emissao_certificado->setAction( new TAction([$this, 'onReload']), ['order' => 'data_emissao_certificado']);
         
         $action1 = new TDataGridAction(['CertificadosFormView', 'onEdit'],   ['key' => '{id_certificado}'] );
         $action2 = new TDataGridAction([$this, 'onDelete'],   ['key' => '{id_certificado}'] );

@@ -10,10 +10,10 @@ class Certificados extends TRecord
         parent::__construct($id_certificado, $callObjectLoad);
         parent::addAttribute('id_evento');
         parent::addAttribute('titulo_certificado');
-        parent::addAttribute('descricao_certificado');
         parent::addAttribute('data_emissao_certificado');
         parent::addAttribute('bg_frente');
         parent::addAttribute('carga_horaria_certificado');
+        parent::addAttribute('tipo_certificado');
     }
 
     public function get_evento()

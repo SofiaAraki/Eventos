@@ -55,6 +55,14 @@ class InscricoesFormView extends TPage
             '1' => 'Confirmada',
             '0' => 'Pendente'
         ]);
+        $tipo_participacao = new TCombo('tipo_participacao');
+        $tipo_participacao->addItems([
+            'aluno' => 'Aluno',
+            'palestrante' => 'Palestrante',
+            'banca' => 'Banca',
+            'orientador' => 'Orientador',
+            'autor' => 'Autor'
+        ]);
         
         // add the form fields
         $this->form->addFields( [$id] );
@@ -62,7 +70,8 @@ class InscricoesFormView extends TPage
         $this->form->addFields( [new TLabel('Usuário', 'red')], [$id_usuario] );
         $this->form->addFields( 
             [new TLabel('Data Inscrição', 'red')], [$data_inscricao],
-            [new TLabel('Status Inscrição', 'red')], [$status_inscricao]
+            [new TLabel('Status Inscrição', 'red')], [$status_inscricao],
+            [new TLabel('Tipo Participação', 'red')], [$tipo_participacao]
         );
         
         

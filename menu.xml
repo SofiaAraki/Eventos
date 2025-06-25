@@ -10,6 +10,10 @@
                 <icon></icon>
                 <action>MinhasInscricoesView</action>
             </menuitem>
+            <menuitem>
+                <icon></icon>
+                <action>EmitirCertificados</action>
+            </menuitem>
         </menu>
     </menuitem>
 
@@ -41,10 +45,6 @@
                 <icon></icon>
                 <action>CertificadosFormView</action>
             </menuitem>
-            <menuitem>
-                <icon></icon>
-                <action>EmitirCertificados</action>
-            </menuitem>
             <menuitem label='Pagamentos'>
                 <icon></icon>
                 <action>PagamentosView</action>
@@ -52,6 +52,22 @@
             <menuitem>
                 <icon></icon>
                 <action>PagamentosFormView</action>
+            </menuitem>
+            <menuitem label='Registros'>
+                <icon></icon>
+                <action>RegistrosView</action>
+            </menuitem>
+            <menuitem>
+                <icon></icon>
+                <action>RegistrosFormView</action>
+            </menuitem>
+            <menuitem label='TCC'>
+                <icon></icon>
+                <action>TccsView</action>
+            </menuitem>
+            <menuitem>
+                <icon></icon>
+                <action>TccsFormView</action>
             </menuitem>
         </menu>
     </menuitem>

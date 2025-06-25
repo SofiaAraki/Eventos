@@ -13,6 +13,7 @@ class Inscricoes extends TRecord
         parent::addAttribute('id_usuario');
         parent::addAttribute('id_evento');
         parent::addAttribute('status_inscricao');
+        parent::addAttribute('tipo_participacao');
     }
 
     public function get_status_inscricao_nome()
