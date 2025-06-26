@@ -53,12 +53,14 @@ class InscricoesView extends TPage
         
         // creates the datagrid columns
         $id_evento    = new TDataGridColumn('id_inscricao', 'ID', 'left', '5%');
-        $id_usuario  = new TDataGridColumn('usuario', 'Nome', 'left', '40%');
+        $tipo_participacao = new TDataGridColumn('tipo_participacao', 'Tipo', 'left', '10%');
+        $id_usuario  = new TDataGridColumn('usuario', 'Nome', 'left', '30%');
         $titulo_evento = new TDataGridColumn('evento', 'Evento', 'left', '30%');
         $data_inscricao = new TDataGridColumn('data_inscricao', 'Data de Inscrição', 'center', '15%');
         $status_inscricao = new TDataGridColumn('status_inscricao', 'Status', 'center', '10%');
                 
         $this->datagrid->addColumn($id_evento);
+        $this->datagrid->addColumn($tipo_participacao);
         $this->datagrid->addColumn($id_usuario);
         $this->datagrid->addColumn($titulo_evento);
         $this->datagrid->addColumn($data_inscricao);

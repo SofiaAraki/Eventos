@@ -87,19 +87,19 @@
                   <icon>fas:users fa-fw</icon>
                   <action>SystemGroupList</action>
               </menuitem>
-              <menuitem label='_t{Units}'>
+              <!-- <menuitem label='_t{Units}'>
                   <icon>fas:university fa-fw</icon>
                   <action>SystemUnitList</action>
               </menuitem>
               <menuitem label='_t{Roles}'>
                   <icon>fas:user-tag fa-fw</icon>
                   <action>SystemRoleList</action>
-              </menuitem>
+              </menuitem> -->
               <menuitem label='_t{Users}'>
                   <icon>fas:user fa-fw</icon>
                   <action>SystemUserList</action>
               </menuitem>
-              <menuitem label='_t{Page management}'>
+              <!-- <menuitem label='_t{Page management}'>
                     <icon>fab:wikipedia-w fa-fw</icon>
                     <action>SystemWikiList</action>
               </menuitem>
@@ -114,7 +114,7 @@
               <menuitem label='_t{Preferences}'>
                   <icon>fas:cog fa-fw</icon>
                   <action>SystemPreferenceForm#method=onEdit</action>
-              </menuitem>
+              </menuitem> -->
         </menu>
     </menuitem>
     
@@ -137,14 +137,14 @@
                   <icon>fas:database fa-fw</icon>
                   <action>SystemSqlLogList</action>
               </menuitem>
-              <menuitem label='_t{Request Log}'>
+              <!-- <menuitem label='_t{Request Log}'>
                   <icon>fas:globe fa-fw</icon>
                   <action>SystemRequestLogList</action>
               </menuitem>
               <menuitem label='_t{Schedules}'>
                   <icon>fas:clock fa-fw</icon>
                   <action>SystemScheduleLogList</action>
-              </menuitem>
+              </menuitem> -->
               <menuitem label='_t{PHP Log}'>
                   <icon>fas:exclamation-triangle fa-fw</icon>
                   <action>SystemPHPErrorLogView</action>

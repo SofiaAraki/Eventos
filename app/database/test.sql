@@ -39,7 +39,7 @@ CREATE TABLE pagamentos (
     id_inscricao INT NOT NULL,
     status_pagamento TINYINT(1) NOT NULL DEFAULT 0,
     data_pagamento DATETIME DEFAULT CURRENT_TIMESTAMP,    
-    FOREIGN KEY (id_inscricao) REFERENCES inscricoes(id)
+    FOREIGN KEY (id_inscricao) REFERENCES inscricoes(id_inscricao)
 );
 
 CREATE TABLE registros (

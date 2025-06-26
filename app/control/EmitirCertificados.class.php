@@ -88,7 +88,7 @@ class EmitirCertificados extends TPage
                 return "A instituição, pelo presente, certifica que {$user->name}, Ministrou a palestra  \"{$evento->titulo_evento}\", {$this->formatarPeriodoEvento($evento->data_inicio_evento, $evento->data_fim_evento)}, com carga horária equivalente a {$certificado->carga_horaria_certificado} horas.<br><br><br><br>Ituverava, {$this->formatarDataExtenso($certificado->data_emissao_certificado)}.";
             default:
                 // certificado "aluno" genérico
-                return "A instituição, pelo presente, certifica que {$user->name}, portador(a) do RG: {$user->rg}, participou do evento \"{$evento->titulo_evento}\", {$this->formatarPeriodoEvento($evento->data_inicio_evento, $evento->data_fim_evento)}, com carga horária equivalente a {$certificado->carga_horaria_certificado} horas.<br><br><br><br>Ituverava, {$this->formatarDataExtenso($certificado->data_emissao_certificado)}.";
+                return "A instituição, pelo presente, certifica que <strong>{$user->name}</strong> portador(a) do <strong>RG: {$user->rg}</strong>, participou do evento <strong>\"{$evento->titulo_evento}\"</strong>, {$this->formatarPeriodoEvento($evento->data_inicio_evento, $evento->data_fim_evento)}, com carga horária equivalente a {$certificado->carga_horaria_certificado} horas.<br><br><br><br>Ituverava, {$this->formatarDataExtenso($certificado->data_emissao_certificado)}.";
         }
     }
 
@@ -127,7 +127,7 @@ class EmitirCertificados extends TPage
     {
         $html = "<html><head><meta charset='utf-8'></head><body>";
         $html .= "<div style='position: relative; width: 80%; height: 100%; font-family: Arial; margin: auto;'>";
-        $html .= "<div style='position:relative; text-align: center; z-index:1;'>"; // imagem de fundo
+        $html .= "<div style='position:relative; text-align: center; z-index:1; '>"; // imagem de fundo
         $html .= "<h1 style='font-size: 50px; margin: 100px 30px auto;'>" . htmlspecialchars('CERTIFICADO') . "</h1>";
         $html .= "<p style='font-size: 25px; line-height: 1.6; margin-top: 120px;'>$texto</p>";
         $html .= "</div></div></body></html>";

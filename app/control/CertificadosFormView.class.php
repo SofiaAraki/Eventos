@@ -37,6 +37,7 @@ class CertificadosFormView extends TPage
             'banca'      => 'Banca',
             'orientador' => 'Orientador',
             'palestrante'=> 'Palestrante',
+            'autor'      => 'Autor'
         ]);
         
         $this->form->addFields([$id_certificado]);

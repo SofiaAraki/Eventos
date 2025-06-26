@@ -128,7 +128,7 @@ class TccsFormView extends TPage
                         $certificado->tipo_certificado          = $tipo;
                         $certificado->titulo_certificado        = "Certificado de $tipo - {$evento->titulo_evento}";
                         $certificado->descricao_certificado     = null;
-                        $certificado->carga_horaria_certificado = null;
+                        $certificado->carga_horaria_certificado = 0;
                         $certificado->bg_frente                 = null;
                         $certificado->data_emissao_certificado  = date('Y-m-d H:i:s');
                         $certificado->store();

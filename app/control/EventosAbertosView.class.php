@@ -100,19 +100,27 @@ class EventosAbertosView extends TStandardList
                 $inscricao->id_usuario      = $user_id;
                 $inscricao->data_inscricao  = date('Y-m-d H:i:s');
                 $inscricao->status_inscricao = 0;
-                $inscricao->valor_pago      = $evento->valor_evento ?? 0;
                 $inscricao->store();
 
+                // cria o pagamento
                 $pagamento = new Pagamentos;
                 $pagamento->id_inscricao     = $inscricao->id_inscricao;
-                $pagamento->status_pagamento = 0; // pendente
                 $pagamento->data_pagamento   = date('Y-m-d H:i:s');
+
+                // Verifica o valor do evento
+                if (floatval($evento->valor_evento) == 0.00) {
+                    $pagamento->status_pagamento = 1; // Confirmado automaticamente
+                } else {
+                    $pagamento->status_pagamento = 0; // Pendente
+                }
+                
                 $pagamento->store();
 
                 new TMessage('info', 'Inscrição realizada com sucesso!');
             }
 
             TTransaction::close();
+
         } catch (Exception $e) {
             TTransaction::rollback();
             new TMessage('error', $e->getMessage());
