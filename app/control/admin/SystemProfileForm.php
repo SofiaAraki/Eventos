@@ -26,6 +26,7 @@ class SystemProfileForm extends TPage
         
         $name  = new TEntry('name');
         $login = new TEntry('login');
+        $login->setMask('999.999.999-99');
         $email = new TEntry('email');
         $address = new TEntry('address');
         $phone = new TEntry('phone');

@@ -28,6 +28,7 @@ class SystemRegistrationForm extends TPage
         
         // create the form fields
         $login      = new TEntry('login');
+        $login->setMask('999.999.999-99');
         $name       = new TEntry('name');
         $email      = new TEntry('email');
         $password   = new TPassword('password');

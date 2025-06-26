@@ -31,10 +31,12 @@ class CertificadosFormView extends TPage
         $titulo_certificado           = new TEntry('titulo_certificado');
         $data_emissao_certificado     = new TDate('data_emissao_certificado');
         $carga_horaria_certificado    = new TEntry('carga_horaria_certificado');
-        $bg_frente                    = new TFile('bg_frente');
+        $bg_frente = new TCombo('bg_frente');
+        $bg_frente->addItems([
+            'fundacao.png' => 'Modelo FE',
+            'fafram.png'   => 'Modelo FAFRAM',
+        ]);
         $tipo_certificado             = new TCombo('tipo_certificado');
-
-        // opções
         $tipo_certificado->addItems([
             'aluno'       => 'Aluno',
             'banca'       => 'Banca',

@@ -36,16 +36,17 @@ class SystemUserForm extends TPage
         $id            = new TEntry('id');
         $name          = new TEntry('name');
         $login         = new TEntry('login');
+        $login->setMask('999.999.999-99');
         $password      = new TPassword('password');
         $repassword    = new TPassword('repassword');
         $email         = new TEntry('email');
-        $unit_id       = new TDBCombo('system_unit_id','permission','SystemUnit','id','name');
+        //$unit_id       = new TDBCombo('system_unit_id','permission','SystemUnit','id','name');
         $frontpage_id  = new TDBUniqueSearch('frontpage_id', 'permission', 'SystemProgram', 'id', 'name', 'name');
-        $phone         = new TEntry('phone');
-        $address       = new TEntry('address');
-        $function_name = new TEntry('function_name');
-        $about         = new TEntry('about');
-        $custom_code   = new TEntry('custom_code');
+        //$phone         = new TEntry('phone');
+        //$address       = new TEntry('address');
+        //$function_name = new TEntry('function_name');
+        //$about         = new TEntry('about');
+        //$custom_code   = new TEntry('custom_code');
         
         $password->disableAutoComplete();
         $repassword->disableAutoComplete();
@@ -62,7 +63,7 @@ class SystemUserForm extends TPage
         $password->setSize('100%');
         $repassword->setSize('100%');
         $email->setSize('100%');
-        $unit_id->setSize('100%');
+        //$unit_id->setSize('100%');
         $frontpage_id->setSize('100%');
         $frontpage_id->setMinLength(1);
         
@@ -74,13 +75,15 @@ class SystemUserForm extends TPage
         $login->addValidation('Login', new TRequiredValidator);
         $email->addValidation('Email', new TEmailValidator);
         
-        $this->form->addFields( [new TLabel('ID')], [$id],  [new TLabel(_t('Name'))], [$name] );
-        $this->form->addFields( [new TLabel(_t('Login'))], [$login],  [new TLabel(_t('Email'))], [$email] );
-        $this->form->addFields( [new TLabel(_t('Address'))], [$address],  [new TLabel(_t('Phone'))], [$phone] );
-        $this->form->addFields( [new TLabel(_t('Function'))], [$function_name],  [new TLabel(_t('About'))], [$about] );
-        $this->form->addFields( [new TLabel(_t('Main unit'))], [$unit_id],  [new TLabel(_t('Front page'))], [$frontpage_id] );
+        $this->form->addFields( [new TLabel('ID')], [$id],  [new TLabel(_t('Login'))], [$login] );
+        $this->form->addFields( [new TLabel(_t('Name'))], [$name] );
+        $this->form->addFields( [new TLabel(_t('Email'))], [$email] );
+        //$this->form->addFields( [new TLabel(_t('Address'))], [$address],  [new TLabel(_t('Phone'))], [$phone] );
+        //$this->form->addFields( [new TLabel(_t('Function'))], [$function_name],  [new TLabel(_t('About'))], [$about] );
+        //$this->form->addFields( [new TLabel(_t('Main unit'))], [$unit_id],  [new TLabel(_t('Front page'))], [$frontpage_id] );
+        $this->form->addFields( [new TLabel(_t('Front page'))], [$frontpage_id] );
         $this->form->addFields( [new TLabel(_t('Password'))], [$password],  [new TLabel(_t('Password confirmation'))], [$repassword] );
-        $this->form->addFields( [new TLabel(_t('Custom code'))], [$custom_code] );
+        //$this->form->addFields( [new TLabel(_t('Custom code'))], [$custom_code] );
         
         $subform = new BootstrapFormBuilder;
         $subform->setFieldSizes('100%');
@@ -92,19 +95,19 @@ class SystemUserForm extends TPage
         $this->group_list->setHeight(210);
         $subform->addFields( [$this->group_list] );
         
-        $subform->appendPage( _t('Units') );
-        $this->unit_list = new TDBCheckList('unit_list', 'permission', 'SystemUnit', 'id', 'name');
-        $this->unit_list->makeScrollable();
-        $this->unit_list->setHeight(210);
+        // $subform->appendPage( _t('Units') );
+        // $this->unit_list = new TDBCheckList('unit_list', 'permission', 'SystemUnit', 'id', 'name');
+        // $this->unit_list->makeScrollable();
+        // $this->unit_list->setHeight(210);
         
-        $subform->addFields( [$this->unit_list] );
+        // $subform->addFields( [$this->unit_list] );
         
-        $subform->appendPage( _t('Roles') );
-        $this->role_list = new TDBCheckList('role_list', 'permission', 'SystemRole', 'id', 'name');
-        $this->role_list->makeScrollable();
-        $this->role_list->setHeight(210);
+        // $subform->appendPage( _t('Roles') );
+        // $this->role_list = new TDBCheckList('role_list', 'permission', 'SystemRole', 'id', 'name');
+        // $this->role_list->makeScrollable();
+        // $this->role_list->setHeight(210);
         
-        $subform->addFields( [$this->role_list] );
+        // $subform->addFields( [$this->role_list] );
         
         $subform->appendPage( _t('Programs') );
         $this->program_list = new TCheckList('program_list');

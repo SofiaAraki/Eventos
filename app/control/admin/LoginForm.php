@@ -44,7 +44,7 @@ class LoginForm extends TPage
         $login->setMask('999.999.999-99');
         $login->placeholder = 'CPF';
         
-        $login->disableAutoComplete();
+        //$login->disableAutoComplete();
         $password->disableAutoComplete();
         $login->setSize('100%');
         $password->setSize('100%');

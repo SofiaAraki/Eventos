@@ -50,7 +50,7 @@ class EmitirCertificados extends TPage
             $registro->data_emissao          = date('Y-m-d H:i:s');
             $registro->store();
 
-            $this->gerarPdfCertificado($texto, $registro->id_registro);
+            $this->gerarPdfCertificado($texto, $registro->id_registro, $certificadoModelo);
 
             TTransaction::close();
 
@@ -88,7 +88,7 @@ class EmitirCertificados extends TPage
                 return "A instituição, pelo presente, certifica que {$user->name}, Ministrou a palestra  \"{$evento->titulo_evento}\", {$this->formatarPeriodoEvento($evento->data_inicio_evento, $evento->data_fim_evento)}, com carga horária equivalente a {$certificado->carga_horaria_certificado} horas.<br><br><br><br>Ituverava, {$this->formatarDataExtenso($certificado->data_emissao_certificado)}.";
             default:
                 // certificado "aluno" genérico
-                return "A instituição, pelo presente, certifica que <strong>{$user->name}</strong> portador(a) do <strong>RG: {$user->rg}</strong>, participou do evento <strong>\"{$evento->titulo_evento}\"</strong>, {$this->formatarPeriodoEvento($evento->data_inicio_evento, $evento->data_fim_evento)}, com carga horária equivalente a {$certificado->carga_horaria_certificado} horas.<br><br><br><br>Ituverava, {$this->formatarDataExtenso($certificado->data_emissao_certificado)}.";
+                return "A instituição, pelo presente, certifica que <strong>{$user->name}</strong> portador(a) do <strong>RG: {$user->rg}</strong>, participou do evento <strong>\"{$evento->titulo_evento}\"</strong>, {$this->formatarPeriodoEvento($evento->data_inicio_evento, $evento->data_fim_evento)}, com carga horária equivalente a {$certificado->carga_horaria_certificado} horas.<br><br><br>Ituverava, {$this->formatarDataExtenso($certificado->data_emissao_certificado)}.";
         }
     }
 
@@ -123,14 +123,27 @@ class EmitirCertificados extends TPage
         return ($inicio_ext === $fim_ext) ? "realizado em {$inicio_ext}" : "realizado de {$inicio_ext} até {$fim_ext}";
     }
 
-    private function gerarPdfCertificado(string $texto, int $registro_id)
-    {
+    private function gerarPdfCertificado(string $texto, int $registro_id, Certificados $certificado)
+    {   
+        $bg_path = 'app/images/certificados/' . ($certificado->bg_frente ?? 'fundacao.png');
+        $bg_full_path = getcwd() . '/' . $bg_path;
+
         $html = "<html><head><meta charset='utf-8'></head><body>";
-        $html .= "<div style='position: relative; width: 80%; height: 100%; font-family: Arial; margin: auto;'>";
-        $html .= "<div style='position:relative; text-align: center; z-index:1; '>"; // imagem de fundo
-        $html .= "<h1 style='font-size: 50px; margin: 100px 30px auto;'>" . htmlspecialchars('CERTIFICADO') . "</h1>";
-        $html .= "<p style='font-size: 25px; line-height: 1.6; margin-top: 120px;'>$texto</p>";
+        $html .= "<div style='position: relative; width: 100%; height: 100%; font-family: Arial;'>";
+
+        // Verifica se o fundo existe e adiciona como imagem de fundo
+        if (file_exists($bg_full_path)) {
+            $bg_data = base64_encode(file_get_contents($bg_full_path));
+            $bg_src = 'data:image/png;base64,' . $bg_data;
+            $html .= "<img src='$bg_src' style='position: absolute; width: 100%; height: 100%; z-index: 0;'>"; 
+        }
+
+        // Conteúdo do certificado
+        $html .= "<div style='position: relative; text-align: center; padding: 100px 100px; z-index: 1;'>";
+        $html .= "<h1 style='font-size: 50px; margin: 50px 30px auto;'>CERTIFICADO</h1><br><br>";
+        $html .= "<p style='font-size: 25px; line-height: 1.6;'>$texto</p>";
         $html .= "</div></div></body></html>";
+
         $dompdf = new \Dompdf\Dompdf();
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'landscape');
