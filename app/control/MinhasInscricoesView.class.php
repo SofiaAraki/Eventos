@@ -21,34 +21,10 @@ class MinhasInscricoesView extends TStandardList
         parent::setActiveRecord('Inscricoes');
 
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
+        $this->datagrid->width = '100%';
 
-        $titulo_evento = new TDataGridColumn('evento', 'Evento', 'center', '40%');
-        $data_inscricao   = new TDataGridColumn('data_inscricao', 'Data de Inscrição', 'center', '30%');
-        $status_inscricao = new TDataGridColumn('status_inscricao', 'Status', 'center', '20%');
-
-        $this->datagrid->addColumn($titulo_evento);
-        $this->datagrid->addColumn($data_inscricao);
-        $this->datagrid->addColumn($status_inscricao);
-
-        $data_inscricao->setTransformer(function($value, $object, $row) {
-            $date = new DateTime($value);
-            return $date->format('d/m/Y H:i');
-        });
-        $status_inscricao->setTransformer(function ($value, $object, $row) {
-            switch ($value) {
-                case 0: return '<span class="label label-danger">Pendente</span>';
-                case 1: return '<span class="label label-success">Confirmada</span>';
-                default: return $value;
-            }
-        });
-
-        $action = new TDataGridAction([$this, 'onEmitirCertificado'], ['id_inscricao' => '{id_inscricao}']);
-        $action->setUseButton(true);
-        $action->setButtonClass('btn btn-default');
-        $action->setLabel('Emitir Certificado');
-        $action->setImage('fa:certificate blue');
-
-        $this->datagrid->addAction($action);
+        $this->configureColumns();
+        $this->configureActions();
 
         $this->datagrid->createModel();
 
@@ -64,15 +40,45 @@ class MinhasInscricoesView extends TStandardList
         parent::add($vbox);
     }
 
+    private function configureColumns()
+    {
+        $col_evento  = new TDataGridColumn('evento', 'Evento', 'center', '40%');
+        $col_data    = new TDataGridColumn('data_inscricao', 'Data de Inscrição', 'center', '30%');
+        $col_status  = new TDataGridColumn('status_inscricao', 'Status', 'center', '20%');
+
+        $col_data->setTransformer(fn($v) => (new DateTime($v))->format('d/m/Y H:i'));
+        $col_status->setTransformer([$this, 'formatStatus']);
+
+        $this->datagrid->addColumn($col_evento);
+        $this->datagrid->addColumn($col_data);
+        $this->datagrid->addColumn($col_status);
+    }
+
+    private function configureActions()
+    {
+        $action = new TDataGridAction([$this, 'onEmitirCertificado'], ['id_inscricao' => '{id_inscricao}']);
+        $action->setUseButton(true);
+        $action->setButtonClass('btn btn-default');
+        $action->setLabel('Emitir Certificado');
+        $action->setImage('fa:certificate blue');
+
+        $this->datagrid->addAction($action);
+    }
+
     public function onReload($param = null)
     {
         try {
             TTransaction::open('test');
 
-            $repository = new TRepository('Inscricoes');
-            $criteria = new TCriteria;
-            $criteria->add(new TFilter('id_usuario', '=', TSession::getValue('userid')));
+            $userId = TSession::getValue('userid');
+            if (!$userId) {
+                throw new Exception('Usuário não autenticado.');
+            }
 
+            $criteria = new TCriteria;
+            $criteria->add(new TFilter('id_usuario', '=', $userId));
+
+            $repository = new TRepository('Inscricoes');
             $inscricoes = $repository->load($criteria);
 
             $this->datagrid->clear();
@@ -85,8 +91,8 @@ class MinhasInscricoesView extends TStandardList
 
             TTransaction::close();
         } catch (Exception $e) {
-            new TMessage('error', $e->getMessage());
             TTransaction::rollback();
+            new TMessage('error', $e->getMessage());
         }
     }
 
@@ -97,30 +103,35 @@ class MinhasInscricoesView extends TStandardList
     }
 
     public function onEmitirCertificado($param)
-    {   
-        TTransaction::open('test');
-        
-        $inscricao = new Inscricoes($param['id_inscricao']);
-
-        if ($inscricao->status_inscricao != 1) {
-            new TMessage('warning', 'O certificado estará disponível apenas após a confirmação da sua inscrição.');
-            return;
-        }
-
-        TTransaction::close();
-
+    {
         try {
-            $id = isset($param['id_inscricao']) ? (int) $param['id_inscricao'] : null;
+            TTransaction::open('test');
 
-            if ($id > 0) {
-                $url = "index.php?class=EmitirCertificados&id_inscricao={$id}";
-                TScript::create("window.open('{$url}', '_blank');");
-            } else {
-                throw new Exception('Inscrição não encontrada.');
+            $id = (int) ($param['id_inscricao'] ?? 0);
+            $inscricao = new Inscricoes($id);
+
+            if ($inscricao->status_inscricao != 1) {
+                throw new Exception('O certificado estará disponível apenas após a confirmação da sua inscrição.');
             }
+
+            TTransaction::close();
+
+            $url = "index.php?class=EmitirCertificados&id_inscricao={$id}";
+            TScript::create("window.open('{$url}', '_blank');");
+
         } catch (Exception $e) {
-            new TMessage('error', $e->getMessage());
+            TTransaction::rollback();
+            new TMessage('warning', $e->getMessage());
         }
     }
 
+    public function formatStatus($value)
+    {
+        return match($value) {
+            0 => '<span class="label label-danger">Pendente</span>',
+            1 => '<span class="label label-success">Confirmada</span>',
+            default => $value,
+        };
+    }
 }
+

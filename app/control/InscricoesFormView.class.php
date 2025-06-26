@@ -11,76 +11,24 @@
  */
 class InscricoesFormView extends TPage
 {
-    protected $form; // form
-    
-    // trait with onSave, onClear, onEdit
+    protected $form;
+
     use Adianti\Base\AdiantiStandardFormTrait;
-    
-    function __construct()
+
+    public function __construct()
     {
         parent::__construct();
-        
-        $this->setDatabase('test');    // defines the database
-        $this->setActiveRecord('Inscricoes');   // defines the active record
-        
-        // creates the form
+
+        $this->setDatabase('test');
+        $this->setActiveRecord('Inscricoes');
+
         $this->form = new BootstrapFormBuilder('form_Inscricoes');
         $this->form->setFormTitle('Nova Inscrição');
         $this->form->setClientValidation(true);
-        
-        // create the form fields
-        $id       = new THidden('id_inscricao');
-        $id->setEditable(FALSE);
-        try {
-            TTransaction::open('test');
 
-            $id_evento = new TDBUniqueSearch('id_evento', 'test', 'Eventos', 'id_evento', 'titulo_evento');
+        $this->createFormFields();
+        $this->addFormActions();
 
-            TTransaction::close();
-        } catch (Exception $e) {
-            new TMessage('error', $e->getMessage());
-        }
-        try {
-            TTransaction::open('test');
-
-            $id_usuario = new TDBUniqueSearch('id_usuario', 'test', 'SystemUser', 'id', 'name');
-
-            TTransaction::close();
-        } catch (Exception $e) {
-            new TMessage('error', $e->getMessage());
-        }
-        $data_inscricao = new TDate('data_inscricao');
-        $status_inscricao = new TCombo('status_inscricao');
-        $status_inscricao->addItems([
-            '1' => 'Confirmada',
-            '0' => 'Pendente'
-        ]);
-        $tipo_participacao = new TCombo('tipo_participacao');
-        $tipo_participacao->addItems([
-            'aluno' => 'Aluno',
-            'palestrante' => 'Palestrante',
-            'banca' => 'Banca',
-            'orientador' => 'Orientador',
-            'autor' => 'Autor'
-        ]);
-        
-        // add the form fields
-        $this->form->addFields( [$id] );
-        $this->form->addFields( [new TLabel('Evento', 'red')], [$id_evento] );
-        $this->form->addFields( [new TLabel('Usuário', 'red')], [$id_usuario] );
-        $this->form->addFields( 
-            [new TLabel('Data Inscrição', 'red')], [$data_inscricao],
-            [new TLabel('Status Inscrição', 'red')], [$status_inscricao],
-            [new TLabel('Tipo Participação', 'red')], [$tipo_participacao]
-        );
-        
-        
-        // define the form action
-        $this->form->addAction('Salvar', new TAction(array($this, 'onSave')), 'fa:save green');
-        $this->form->addActionLink('Limpar',  new TAction(array($this, 'onClear')), 'fa:eraser red');
-        $this->form->addActionLink('Voltar',  new TAction(array('InscricoesView', 'onReload')), 'fa:table blue');
-
-        // wrap the page content using vertical box
         $vbox = new TVBox;
         $vbox->style = 'width: 100%';
         $vbox->add(new TXMLBreadCrumb('menu.xml', __CLASS__));
@@ -89,49 +37,95 @@ class InscricoesFormView extends TPage
         parent::add($vbox);
     }
 
-    function onSave()
+    private function createFormFields()
     {
-        try
-        {
+        $id = new THidden('id_inscricao');
+        $id->setEditable(false);
+
+        $id_evento = $this->createDBUniqueSearch('id_evento', 'Eventos', 'id_evento', 'titulo_evento');
+        $id_usuario = $this->createDBUniqueSearch('id_usuario', 'SystemUser', 'id', 'name');
+
+        $data_inscricao = new TDate('data_inscricao');
+
+        $status_inscricao = new TCombo('status_inscricao');
+        $status_inscricao->addItems([
+            '1' => 'Confirmada',
+            '0' => 'Pendente'
+        ]);
+
+        $tipo_participacao = new TCombo('tipo_participacao');
+        $tipo_participacao->addItems([
+            'aluno' => 'Aluno',
+            'palestrante' => 'Palestrante',
+            'banca' => 'Banca',
+            'orientador' => 'Orientador',
+            'autor' => 'Autor'
+        ]);
+
+        // Adiciona os campos ao formulário
+        $this->form->addFields([$id]);
+        $this->form->addFields([new TLabel('Evento', 'red')], [$id_evento]);
+        $this->form->addFields([new TLabel('Usuário', 'red')], [$id_usuario]);
+        $this->form->addFields(
+            [new TLabel('Data Inscrição', 'red')], [$data_inscricao],
+            [new TLabel('Status Inscrição', 'red')], [$status_inscricao],
+            [new TLabel('Tipo Participação', 'red')], [$tipo_participacao]
+        );
+    }
+
+    private function createDBUniqueSearch($field, $model, $key, $label)
+    {
+        try {
             TTransaction::open('test');
-            
+            $search = new TDBUniqueSearch($field, 'test', $model, $key, $label);
+            TTransaction::close();
+            return $search;
+        } catch (Exception $e) {
+            new TMessage('error', $e->getMessage());
+            return new TEntry($field); // fallback input
+        }
+    }
+
+    private function addFormActions()
+    {
+        $this->form->addAction('Salvar', new TAction([$this, 'onSave']), 'fa:save green');
+        $this->form->addActionLink('Limpar', new TAction([$this, 'onClear']), 'fa:eraser red');
+        $this->form->addActionLink('Voltar', new TAction(['InscricoesView', 'onReload']), 'fa:table blue');
+    }
+
+    public function onSave()
+    {
+        try {
+            TTransaction::open('test');
+
             $this->form->validate();
             $data = $this->form->getData();
 
-            // Cria a inscrição
             $inscricao = new Inscricoes;
-            $inscricao->fromArray( (array) $data );
-            $inscricao->store(); // grava e gera o ID da inscrição
+            $inscricao->fromArray((array) $data);
+            $inscricao->store();
 
-            // Cria o pagamento vinculado
             $pagamento = new Pagamentos;
             $pagamento->id_inscricao = $inscricao->id_inscricao;
-            $pagamento->status_pagamento = '0'; // Pendente por padrão
-            $pagamento->data_pagamento = null;  // ou date('Y-m-d') se quiser registrar a tentativa
+            $pagamento->status_pagamento = '0';
+            $pagamento->data_pagamento = null;
             $pagamento->store();
 
-            // Preenche o formulário com os dados atualizados
             $this->form->setData($inscricao);
 
             TTransaction::close();
-            
+
             new TMessage('info', 'Inscrição criada com sucesso!');
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             new TMessage('error', $e->getMessage());
-            $this->form->setData( $this->form->getData() );
+            $this->form->setData($this->form->getData());
             TTransaction::rollback();
         }
     }
 
-    
-    /**
-     * Clear form
-     */
     public function onClear()
     {
-        $this->form->clear( TRUE );
+        $this->form->clear(true);
     }
-    
 }
+

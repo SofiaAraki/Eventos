@@ -66,10 +66,10 @@ class RegistrosFormView extends TPage
             // Carrega ou cria novo objeto com base no id
             if (!empty($data->id_registro)) {
                 $object = new Registros($data->id_registro); // EDITAR
-                new TMessage('info', 'Certificado atualizado com sucesso!');
+                new TMessage('info', 'Registro do Certificado atualizado com sucesso!');
             } else {
                 $object = new Registros;                        // INSERIR
-                new TMessage('info', 'Certificado criado com sucesso!');
+                new TMessage('info', 'Registro do Certificado criado com sucesso!');
 
             }
 

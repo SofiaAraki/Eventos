@@ -104,28 +104,72 @@ class RegistrosView extends TPage
         $this->onReload();
     }
 
-    public function onEdit($param)
+    public function onReload($param = null)
     {
         try {
-            if (isset($param['key'])) {
-                TTransaction::open('test');
+            TTransaction::open('test');
 
-                $object = new Tccs($param['key']);
-                
-                $data = $object->toArray();
-                $data['autores'] = array_values($object->getAutores());
-                $data['banca']   = array_values($object->getBanca());
+            $repository = new TRepository('Registros');
+            $criteria   = new TCriteria;
 
-                $this->form->setData((object) $data);
+            // carrega os dados do filtro
+            $filter_data = TSession::getValue('RegistrosView_filter_data');
 
-                TTransaction::close();
-            } else {
-                $this->form->clear(true);
+            if ($filter_data) {
+                $ids_inscricao = [];
+
+                // se evento ou usuário foram filtrados
+                if (!empty($filter_data->id_evento) || !empty($filter_data->id_usuario)) {
+                    $insc_repo = new TRepository('Inscricoes');
+                    $insc_crit = new TCriteria;
+
+                    if (!empty($filter_data->id_evento)) {
+                        $insc_crit->add(new TFilter('id_evento', '=', $filter_data->id_evento));
+                    }
+
+                    if (!empty($filter_data->id_usuario)) {
+                        $insc_crit->add(new TFilter('id_usuario', '=', $filter_data->id_usuario));
+                    }
+
+                    $inscricoes = $insc_repo->load($insc_crit);
+
+                    if ($inscricoes) {
+                        foreach ($inscricoes as $insc) {
+                            $ids_inscricao[] = (int) $insc->id_inscricao;
+                        }
+                    }
+
+                    // aplica o filtro
+                    if ($ids_inscricao) {
+                        $criteria->add(new TFilter('id_inscricao', 'IN', $ids_inscricao));
+                    } else {
+                        // nenhuma inscrição encontrada para o filtro
+                        $criteria->add(new TFilter('id_inscricao', '=', 0));
+                    }
+                }
             }
+
+            $criteria->setProperties($param); 
+
+            $registros = $repository->load($criteria);  
+            $this->datagrid->clear();
+
+            if ($registros) {
+                foreach ($registros as $registro) {
+                    $this->datagrid->addItem($registro);
+                }
+            }
+
+            $count = $repository->count($criteria);
+            $this->pageNavigation->setCount($count);
+            $this->pageNavigation->setProperties($param);
+
+            TTransaction::close();
         } catch (Exception $e) {
             new TMessage('error', $e->getMessage());
             TTransaction::rollback();
         }
     }
+
 
 }

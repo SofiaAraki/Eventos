@@ -3,7 +3,7 @@ CREATE TABLE eventos (
     titulo_evento VARCHAR(255) NOT NULL,
     data_inicio_evento DATETIME NOT NULL,
     data_fim_evento DATETIME NOT NULL,
-    local_evento VARCHAR(255) NOT NULL,
+    local_evento VARCHAR(255),
     descricao_evento TEXT,
     status_evento TINYINT(1) NOT NULL DEFAULT 1,
     valor_evento DECIMAL(10,2) DEFAULT 0.00,
@@ -20,6 +20,8 @@ CREATE TABLE inscricoes (
     status_inscricao TINYINT(1) NOT NULL DEFAULT 0,
     FOREIGN KEY (id_usuario) REFERENCES system_users(id),
     FOREIGN KEY (id_evento) REFERENCES eventos(id_evento)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE certificados (
@@ -32,6 +34,8 @@ CREATE TABLE certificados (
     bg_frente VARCHAR(255),
     carga_horaria_certificado INT DEFAULT 0,
     FOREIGN KEY (id_evento) REFERENCES eventos(id_evento)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE pagamentos (
@@ -40,6 +44,8 @@ CREATE TABLE pagamentos (
     status_pagamento TINYINT(1) NOT NULL DEFAULT 0,
     data_pagamento DATETIME DEFAULT CURRENT_TIMESTAMP,    
     FOREIGN KEY (id_inscricao) REFERENCES inscricoes(id_inscricao)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE registros (
@@ -59,15 +65,17 @@ CREATE TABLE tccs (
     titulo_tcc VARCHAR(255) NOT NULL,
     data_tcc DATE NOT NULL,
     id_orientador INT NULL,
-    FOREIGN KEY (id_evento) REFERENCES eventos(id_evento) ON DELETE CASCADE,
-    FOREIGN KEY (id_orientador) REFERENCES system_users(id) ON DELETE SET NULL
+    FOREIGN KEY (id_evento) REFERENCES eventos(id_evento)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (id_orientador) REFERENCES system_users(id) ON DELETE SET NULL ON  UPDATE CASCADE
 );
 
 CREATE TABLE autores (
     id_autor INT AUTO_INCREMENT PRIMARY KEY,
     id_tcc INT NOT NULL,
     autor INT NOT NULL,
-    FOREIGN KEY (id_tcc) REFERENCES tccs(id_tcc) ON DELETE CASCADE,
+    FOREIGN KEY (id_tcc) REFERENCES tccs(id_tcc) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (autor) REFERENCES system_users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -75,27 +83,7 @@ CREATE TABLE banca (
     id_banca INT AUTO_INCREMENT PRIMARY KEY,
     id_tcc INT NOT NULL,
     banca INT NOT NULL,
-    FOREIGN KEY (id_tcc) REFERENCES tccs(id_tcc) ON DELETE CASCADE,
+    FOREIGN KEY (id_tcc) REFERENCES tccs(id_tcc) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (banca) REFERENCES system_users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-
-
-ALTER TABLE certificados
-ADD CONSTRAINT fk_certificados_eventos
-FOREIGN KEY (id_evento)
-REFERENCES eventos(id_evento)
-ON DELETE CASCADE;
-
-ALTER TABLE inscricoes
-ADD CONSTRAINT fk_inscricoes_eventos
-FOREIGN KEY (id_evento)
-REFERENCES eventos(id_evento)
-ON DELETE CASCADE;
-
-ALTER TABLE pagamentos
-ADD CONSTRAINT fk_pagamentos_inscricoes
-FOREIGN KEY (id_inscricao)
-REFERENCES inscricoes(id_inscricao)
-ON DELETE CASCADE;
 
