@@ -27,6 +27,10 @@
             </menuitem>
             <menuitem>
                 <icon></icon>
+                <action>RelatorioEventosView</action>
+            </menuitem>
+            <menuitem>
+                <icon></icon>
                 <action>EventosFormView</action>
             </menuitem>
             <menuitem label='Inscrições'>

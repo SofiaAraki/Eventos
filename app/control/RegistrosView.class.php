@@ -22,9 +22,10 @@ class RegistrosView extends TPage
     {
         parent::__construct();
         
-        $this->setDatabase('test');        // defines the database
-        $this->setActiveRecord('Registros');       // defines the active record
-        $this->setDefaultOrder('id_registro', 'acs');//acs or desc  // default orderine the default order
+        $this->setDatabase('test');                  // define o banco de dados
+        $this->setActiveRecord('Registros');         // define o Active Record (tabela ou entidade)
+        $this->addFilterField('id_registro', 'like', 'id_registro'); // campo de filtro (opcional)
+        $this->setDefaultOrder('id_registro', 'desc'); // define a ordenação padrão (asc ou desc)
         
         
         // creates the form
@@ -149,7 +150,13 @@ class RegistrosView extends TPage
                 }
             }
 
-            $criteria->setProperties($param); 
+            $criteria->setProperties($param);
+
+            // Se não houver ordenação no $param, aplica a padrão
+            if (empty($param['order'])) {
+                $criteria->setProperty('order', 'id_registro');
+                $criteria->setProperty('direction', 'desc');
+            }
 
             $registros = $repository->load($criteria);  
             $this->datagrid->clear();

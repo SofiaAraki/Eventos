@@ -23,16 +23,20 @@ class PagamentosView extends TPage
 
         $this->setDatabase('test');
         $this->setActiveRecord('Pagamentos');
-        $this->setDefaultOrder('id_pagamento', 'asc');
+        $this->addFilterField('status_pagamento', '=', 'status_pagamento');
+        $this->setDefaultOrder('id_pagamento', 'desc');
 
         $this->form = new BootstrapFormBuilder('form_search_Pagamentos');
         $this->form->setFormTitle('Gerenciamento de Pagamentos');
 
         $id_evento = new TDBUniqueSearch('id_evento', 'test', 'Eventos', 'id_evento', 'titulo_evento');
         $id_usuario = new TDBUniqueSearch('id_usuario', 'test', 'SystemUser', 'id', 'name');
+        $status_pagamento = new TCombo('status_pagamento');
+        $status_pagamento->addItems(['1' => 'Confirmado', '0' => 'Pendente']);
 
         $this->form->addFields([new TLabel('Evento:', 'red')], [$id_evento]);
         $this->form->addFields([new TLabel('Usuário:', 'red')], [$id_usuario]);
+        $this->form->addFields([new TLabel('Status:', 'red')], [$status_pagamento]);
 
         $this->form->addAction('Buscar', new TAction([$this, 'onSearch']), 'fa:search blue');
         $this->form->addActionLink('Novo', new TAction(['PagamentosFormView', 'onClear']), 'fa:plus-circle green');
@@ -134,7 +138,14 @@ class PagamentosView extends TPage
             $criteria->setProperties($param);
             $criteria->setProperty('limit', 10);
 
-            $filter_data = TSession::getValue('PagamentosView_filter_data');
+            $filter_data = TSession::getValue('PagamentosView_filter_data') ?? new stdClass;
+
+            $status = $filter_data->status_pagamento ?? null;
+
+            if ($status !== null && $status !== '') {
+                $criteria->add(new TFilter('status_pagamento', '=', $status));
+            }
+
             $ids_inscricao = [];
 
             if ($filter_data && (!empty($filter_data->id_usuario) || !empty($filter_data->id_evento))) {

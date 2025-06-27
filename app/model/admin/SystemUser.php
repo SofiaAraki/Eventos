@@ -32,6 +32,7 @@ class SystemUser extends TRecord
         parent::__construct($id);
         parent::addAttribute('name');
         parent::addAttribute('login');
+        parent::addAttribute('rg');
         parent::addAttribute('password');
         parent::addAttribute('email');
         parent::addAttribute('phone');

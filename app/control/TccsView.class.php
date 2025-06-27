@@ -24,7 +24,7 @@ class TccsView extends TPage
         $this->setDatabase('test');
         $this->setActiveRecord('Tccs');
         $this->addFilterField('titulo_tcc', 'like', 'titulo_tcc');
-        $this->setDefaultOrder('id_tcc', 'asc');
+        $this->setDefaultOrder('id_tcc', 'desc');
 
         $this->buildForm();
         $this->buildDatagrid();
@@ -38,6 +38,8 @@ class TccsView extends TPage
 
         $titulo_tcc = new TEntry('titulo_tcc');
         $this->form->addFields([new TLabel('Tema:', 'red')], [$titulo_tcc]);
+        $orientador = new TEntry('orientador');
+        $this->form->addFields([new TLabel('Orientador:', 'red')], [$orientador]);
 
         $this->form->addAction('Buscar', new TAction([$this, 'onSearch']), 'fa:search blue');
         $this->form->addActionLink('Novo', new TAction(['TccsFormView', 'onClear']), 'fa:plus-circle green');

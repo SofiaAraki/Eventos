@@ -73,22 +73,22 @@ class EmitirCertificados extends TPage
                 $autores = $this->getUsuariosNomes($tcc->getAutores());
                 $orientador = (new SystemUser($tcc->id_orientador))->name;
                 $banca   = $this->getUsuariosNomes($tcc->getBanca());
-                return "A instituição, pelo presente, certifica que <strong>{$user->name}</strong> apresentou seu Trabalho de Graduação intitulado <strong>\"{$tcc->titulo_tcc}\"</strong> defendido em <strong>" . $this->formatarDataExtenso($evento->data_inicio_evento) . "</strong> orientado por <strong>{$orientador}</strong>, avaliado pelos membros da banca <strong>" . implode(', ', $banca) . "</strong><br><br><br>Ituverava, " .$this->formatarDataExtenso($certificado->data_emissao_certificado) . ".";
+                return "A instituição, pelo presente, certifica que <strong>{$user->name}</strong> apresentou seu Trabalho de Graduação intitulado <strong>\"{$tcc->titulo_tcc}\"</strong> defendido em <strong>" . $this->formatarDataExtenso($evento->data_inicio_evento) . "</strong> orientado por <strong>{$orientador}</strong>, avaliado pelos membros da banca <strong>" . implode(', ', $banca) . "</strong><br><br>Ituverava, " .$this->formatarDataExtenso($certificado->data_emissao_certificado) . ".";
             case 'orientador':
                 $tcc     = $this->getTccByEvento($evento->id_evento);
                 $autores = $this->getUsuariosNomes($tcc->getAutores());
                 $banca   = $this->getUsuariosNomes($tcc->getBanca());
-                return "A instituição, pelo presente, certifica que <strong>{$user->name}</strong> orientou o acadêmico <strong>" . implode(', ', $autores) . "</strong> em seu Trabalho de Graduação intitulado <strong>\"{$tcc->titulo_tcc}\"</strong> defendido em <strong>" . $this->formatarDataExtenso($evento->data_inicio_evento) . "</strong>, tendo como membros examinadores <strong>" . implode(', ', $banca) . "</strong><br><br><br>Ituverava, " .$this->formatarDataExtenso($certificado->data_emissao_certificado) . ".";
+                return "A instituição, pelo presente, certifica que <strong>{$user->name}</strong> orientou o acadêmico <strong>" . implode(', ', $autores) . "</strong> em seu Trabalho de Graduação intitulado <strong>\"{$tcc->titulo_tcc}\"</strong> defendido em <strong>" . $this->formatarDataExtenso($evento->data_inicio_evento) . "</strong>, tendo como membros examinadores <strong>" . implode(', ', $banca) . "</strong><br><br>Ituverava, " .$this->formatarDataExtenso($certificado->data_emissao_certificado) . ".";
             case 'banca':
                 $tcc     = $this->getTccByEvento($evento->id_evento);
                 $autores = $this->getUsuariosNomes($tcc->getAutores());
                 $banca   = $this->getUsuariosNomes($tcc->getBanca());
-                return "A instituição, pelo presente, certifica que <strong>{$user->name}</strong> foi membro efetivo da Banca Examinadora do acadêmico <strong>" . implode(', ', $autores) . "</strong> em seu Trabalho de Graduação intitulado <strong>\"{$tcc->titulo_tcc}\"</strong> defendido em <strong>" . $this->formatarDataExtenso($evento->data_inicio_evento) . "</strong>, tendo como membros examinadores <strong>" . implode(', ', $banca) . "</strong><br><br><br>Ituverava, " .$this->formatarDataExtenso($certificado->data_emissao_certificado) . ".";
+                return "A instituição, pelo presente, certifica que <strong>{$user->name}</strong> foi membro efetivo da Banca Examinadora do acadêmico <strong>" . implode(', ', $autores) . "</strong> em seu Trabalho de Graduação intitulado <strong>\"{$tcc->titulo_tcc}\"</strong> defendido em <strong>" . $this->formatarDataExtenso($evento->data_inicio_evento) . "</strong>, tendo como membros examinadores <strong>" . implode(', ', $banca) . "</strong><br><br>Ituverava, " .$this->formatarDataExtenso($certificado->data_emissao_certificado) . ".";
             case 'palestrate':
                 return "A instituição, pelo presente, certifica que {$user->name}, Ministrou a palestra  \"{$evento->titulo_evento}\", {$this->formatarPeriodoEvento($evento->data_inicio_evento, $evento->data_fim_evento)}, com carga horária equivalente a {$certificado->carga_horaria_certificado} horas.<br><br><br><br>Ituverava, {$this->formatarDataExtenso($certificado->data_emissao_certificado)}.";
             default:
                 // certificado "aluno" genérico
-                return "A instituição, pelo presente, certifica que <strong>{$user->name}</strong> portador(a) do <strong>RG: {$user->rg}</strong>, participou do evento <strong>\"{$evento->titulo_evento}\"</strong>, {$this->formatarPeriodoEvento($evento->data_inicio_evento, $evento->data_fim_evento)}, com carga horária equivalente a {$certificado->carga_horaria_certificado} horas.<br><br><br>Ituverava, {$this->formatarDataExtenso($certificado->data_emissao_certificado)}.";
+                return "A instituição, pelo presente, certifica que <strong>{$user->name}</strong> portador(a) do <strong>RG: {$user->rg}</strong>, participou do evento <strong>\"{$evento->titulo_evento}\"</strong>, {$this->formatarPeriodoEvento($evento->data_inicio_evento, $evento->data_fim_evento)}, com carga horária equivalente a {$certificado->carga_horaria_certificado} horas.<br><br>Ituverava, {$this->formatarDataExtenso($certificado->data_emissao_certificado)}.";
         }
     }
 
@@ -140,8 +140,7 @@ class EmitirCertificados extends TPage
 
         // Conteúdo do certificado
         $html .= "<div style='position: relative; text-align: center; padding: 100px 100px; z-index: 1;'>";
-        $html .= "<h1 style='font-size: 50px; margin: 50px 30px auto;'>CERTIFICADO</h1><br><br>";
-        $html .= "<p style='font-size: 25px; line-height: 1.6;'>$texto</p>";
+        $html .= "<p style='font-size: 24px; line-height: 1.6; margin-top: 180px;'>$texto</p>";
         $html .= "</div></div></body></html>";
 
         $dompdf = new \Dompdf\Dompdf();

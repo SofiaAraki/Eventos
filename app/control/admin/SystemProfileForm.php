@@ -36,7 +36,7 @@ class SystemProfileForm extends TPage
         $password1 = new TPassword('password1');
         $password2 = new TPassword('password2');
         $login->setEditable(FALSE);
-        $photo->setAllowedExtensions( ['jpg'] );
+        $photo->setAllowedExtensions( ['jpg', 'png'] );
         
         $name->setSize('80%');
         $login->setSize('80%');

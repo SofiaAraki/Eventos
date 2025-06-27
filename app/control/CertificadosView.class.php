@@ -24,7 +24,7 @@ class CertificadosView extends TPage
         $this->setDatabase('test');                // Banco de dados
         $this->setActiveRecord('Certificados');    // Active Record
         $this->addFilterField('titulo_certificado', 'like', 'titulo_certificado'); // Filtro
-        $this->setDefaultOrder('id_certificado', 'asc');
+        $this->setDefaultOrder('id_certificado', 'desc');
 
         $this->buildForm();
         $this->buildDataGrid();
@@ -86,6 +86,7 @@ class CertificadosView extends TPage
 
         // Ordenar por data
         $col_data->setAction(new TAction([$this, 'onReload']), ['order' => 'data_emissao_certificado']);
+        $col_carga->setAction(new TAction([$this, 'onReload']), ['order' => 'carga_horaria_certificado']);
 
         // Ações da grade
         $this->datagrid->addAction(new TDataGridAction(['CertificadosFormView', 'onEdit'], ['key' => '{id_certificado}']), 'Edit', 'far:edit blue');

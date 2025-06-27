@@ -124,10 +124,10 @@ class SystemRegistrationForm extends TPage
                 throw new Exception(TAdiantiCoreTranslator::translate('The field ^1 is required', _t('Password confirmation')));
             }
             
-            if (isset($ini['general']['validate_strong_pass']) && $ini['general']['validate_strong_pass'] == '1')
-            {
-                (new TStrongPasswordValidator)->validate(_t('Password'), $param['password']);
-            }
+            // if (isset($ini['general']['validate_strong_pass']) && $ini['general']['validate_strong_pass'] == '1')
+            // {
+            //     (new TStrongPasswordValidator)->validate(_t('Password'), $param['password']);
+            // }
             
             if (SystemUser::newFromLogin($param['login']) instanceof SystemUser)
             {

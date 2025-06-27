@@ -36,7 +36,7 @@ class SystemUserForm extends TPage
         $id            = new TEntry('id');
         $name          = new TEntry('name');
         $login         = new TEntry('login');
-        $login->setMask('999.999.999-99');
+        //$login->setMask('999.999.999-99');
         $password      = new TPassword('password');
         $repassword    = new TPassword('repassword');
         $email         = new TEntry('email');
@@ -47,6 +47,9 @@ class SystemUserForm extends TPage
         //$function_name = new TEntry('function_name');
         //$about         = new TEntry('about');
         //$custom_code   = new TEntry('custom_code');
+        $active = new TCombo('active');
+        
+        $active->addItems( [ 'Y' => _t('Yes'), 'N' => _t('No') ] );
         
         $password->disableAutoComplete();
         $repassword->disableAutoComplete();
@@ -75,7 +78,9 @@ class SystemUserForm extends TPage
         $login->addValidation('Login', new TRequiredValidator);
         $email->addValidation('Email', new TEmailValidator);
         
-        $this->form->addFields( [new TLabel('ID')], [$id],  [new TLabel(_t('Login'))], [$login] );
+        
+        $this->form->addFields( [new TLabel('ID')], [$id] );
+        $this->form->addFields( [new TLabel(_t('Login'))], [$login] );
         $this->form->addFields( [new TLabel(_t('Name'))], [$name] );
         $this->form->addFields( [new TLabel(_t('Email'))], [$email] );
         //$this->form->addFields( [new TLabel(_t('Address'))], [$address],  [new TLabel(_t('Phone'))], [$phone] );
@@ -84,6 +89,7 @@ class SystemUserForm extends TPage
         $this->form->addFields( [new TLabel(_t('Front page'))], [$frontpage_id] );
         $this->form->addFields( [new TLabel(_t('Password'))], [$password],  [new TLabel(_t('Password confirmation'))], [$repassword] );
         //$this->form->addFields( [new TLabel(_t('Custom code'))], [$custom_code] );
+        $this->form->addFields( [new TLabel(_t('Active'))], [$active] );
         
         $subform = new BootstrapFormBuilder;
         $subform->setFieldSizes('100%');
@@ -210,10 +216,10 @@ class SystemUserForm extends TPage
             
             if ( $object->password )
             {
-                if (isset($ini['general']['validate_strong_pass']) && $ini['general']['validate_strong_pass'] == '1')
-                {
-                    (new TStrongPasswordValidator)->validate(_t('Password'), $object->password);
-                }
+                // if (isset($ini['general']['validate_strong_pass']) && $ini['general']['validate_strong_pass'] == '1')
+                // {
+                //     (new TStrongPasswordValidator)->validate(_t('Password'), $object->password);
+                // }
                 
                 if( $object->password !== $param['repassword'] )
                 {

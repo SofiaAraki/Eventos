@@ -25,7 +25,8 @@ class InscricoesView extends TPage
         $this->setActiveRecord('Inscricoes');
         $this->addFilterField('id_usuario', '=', 'id_usuario');
         $this->addFilterField('id_evento', '=', 'id_evento');
-        $this->setDefaultOrder('id_inscricao', 'asc');
+        $this->addFilterField('status_inscricao', '=', 'status_inscricao');
+        $this->setDefaultOrder('id_inscricao', 'desc');
 
         $this->createSearchForm();
         $this->createDataGrid();
@@ -47,9 +48,12 @@ class InscricoesView extends TPage
 
         $id_evento = new TDBUniqueSearch('id_evento', 'test', 'Eventos', 'id_evento', 'titulo_evento');
         $id_usuario = new TDBUniqueSearch('id_usuario', 'test', 'SystemUser', 'id', 'name');
+        $status_inscricao = new TCombo('status_inscricao');
+        $status_inscricao->addItems(['1' => 'Confirmado', '0' => 'Pendente']);
 
         $this->form->addFields([new TLabel('Evento:', 'red')], [$id_evento]);
         $this->form->addFields([new TLabel('Usuário:', 'red')], [$id_usuario]);
+        $this->form->addFields([new TLabel('Status:', 'red')], [$status_inscricao]);
 
         $this->addFormActions();
         $this->form->setData(TSession::getValue('InscricoesView_filter_data'));
@@ -87,6 +91,7 @@ class InscricoesView extends TPage
 
         $col_id->setAction(new TAction([$this, 'onReload']), ['order' => 'id_evento']);
         $col_usuario->setAction(new TAction([$this, 'onReload']), ['order' => 'id_usuario']);
+        $col_data->setAction(new TAction([$this, 'onReload']), ['order' => 'data_inscricao']);
 
         $this->datagrid->addAction(new TDataGridAction(['InscricoesFormView', 'onEdit'], ['key' => '{id_inscricao}']), 'Edit', 'far:edit blue');
         $this->datagrid->addAction(new TDataGridAction([$this, 'onDelete'], ['key' => '{id_inscricao}']), 'Delete', 'far:trash-alt red');

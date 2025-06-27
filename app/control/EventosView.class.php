@@ -25,7 +25,8 @@ class EventosView extends TPage
         $this->setActiveRecord('Eventos');
 
         $this->addFilterField('titulo_evento', 'like', 'titulo_evento');
-        $this->setDefaultOrder('id_evento', 'asc');
+        $this->addFilterField('status_evento', '=', 'status_evento');
+        $this->setDefaultOrder('id_evento', 'desc');
 
         $this->createSearchForm();
         $this->createDataGrid();
@@ -49,6 +50,9 @@ class EventosView extends TPage
 
         $titulo_evento = new TEntry('titulo_evento');
         $this->form->addFields([new TLabel('Evento:', 'red')], [$titulo_evento]);
+        $status_evento = new TCombo('status_evento');
+        $status_evento->addItems(['1' => 'Aberto', '0' => 'Fechado']);
+        $this->form->addFields([new TLabel('Status:', 'red')], [$status_evento]);
 
         $this->form->addAction('Buscar', new TAction([$this, 'onSearch']), 'fa:search blue');
         $this->form->addActionLink('Novo', new TAction(['EventosFormView', 'onClear']), 'fa:plus-circle green');
@@ -91,6 +95,10 @@ class EventosView extends TPage
 
         $id_evento->setAction(new TAction([$this, 'onReload']), ['order' => 'id_evento']);
         $titulo_evento->setAction(new TAction([$this, 'onReload']), ['order' => 'titulo_evento']);
+        $data_inicio->setAction(new TAction([$this, 'onReload']), ['order' => 'data_inicio_evento']);
+        $data_fim->setAction(new TAction([$this, 'onReload']), ['order' => 'data_fim_evento']);
+        $valor_evento->setAction(new TAction([$this, 'onReload']), ['order' => 'valor_evento']);
+        $status_evento->setAction(new TAction([$this, 'onReload']), ['order' => 'status_evento']);
 
         $this->datagrid->addAction(
             new TDataGridAction(['EventosFormView', 'onEdit'], ['id_evento' => '{id_evento}']),
@@ -102,6 +110,12 @@ class EventosView extends TPage
             new TDataGridAction([$this, 'onDelete'], ['id_evento' => '{id_evento}']),
             'Delete',
             'far:trash-alt red'
+        );
+
+        $this->datagrid->addAction(
+            new TDataGridAction(['EventosView', 'onRelatorioEventosView'], ['id_evento' => '{id_evento}']),
+            'Relatório',
+            'fa:cubes green fa-lg'
         );
 
         $this->datagrid->createModel();
@@ -142,6 +156,20 @@ class EventosView extends TPage
             TTransaction::close();
         } catch (Exception $e) {
             TTransaction::rollback();
+            new TMessage('error', $e->getMessage());
+        }
+    }
+
+    public function onRelatorioEventosView($param)
+    {
+        try {
+            if (!isset($param['id_evento'])) {
+                throw new Exception('Evento não informado');
+            }
+
+            // Redireciona para a tela do relatório
+            TApplication::loadPage('RelatorioEventosView', 'onReload', ['id_evento' => $param['id_evento']]);
+        } catch (Exception $e) {
             new TMessage('error', $e->getMessage());
         }
     }
