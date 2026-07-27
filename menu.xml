@@ -1,19 +1,56 @@
 <menu>
+
     <menuitem label='Participante'>
         <icon>fas:user fa-fw</icon>
         <menu>
             <menuitem label='Eventos Abertos'>
-                <icon></icon>
-                <action>EventosAbertosView</action>
+                <icon>fas:calendar-alt fa-fw</icon>
+                <action>EventosAbertosList</action>
             </menuitem>
             <menuitem label='Minhas Inscrições'>
-                <icon></icon>
-                <action>MinhasInscricoesView</action>
+                <icon>fas:clipboard-list fa-fw</icon>
+                <action>MinhasInscricoesList</action>
             </menuitem>
             <menuitem>
-                <icon></icon>
-                <action>EmitirCertificados</action>
+                <icon>fas:certificate fa-fw</icon>
+                <action>EmitirCertificado</action>
             </menuitem>
+        </menu>
+    </menuitem>
+
+    <menuitem label='Coordenador'>
+        <icon>fas:user-tie fa-fw</icon>
+        <menu>
+            <menuitem label='Solicitações de Eventos'>
+                <icon>fas:clipboard-check fa-fw</icon>
+                <action>SolicitacaoEventoList</action>
+            </menuitem>
+            <menuitem>
+                <icon>fas:clipboard-check fa-fw</icon>
+                <action>EventoFormCoordenador</action>
+            </menuitem>
+            <menuitem label='Validador de Certificados'>
+                <icon>fas:user-check</icon>
+                <action>Validador</action>
+            </menuitem>
+        </menu>
+    </menuitem>
+
+    <menuitem label='Monitor'>
+        <icon>fas:qrcode fa-fw</icon>
+        <menu>
+            <menuitem label='Scanner QR Code'>
+                <icon>fas:camera fa-fw</icon>
+                <action>ScannerPage</action>
+            </menuitem>
+            <menuitem label='Monitoria de Eventos'>
+                <icon>fas:tasks fa-fw</icon>
+                <action>EventoMonitorList</action>
+            </menuitem>
+            <menuitem>
+                <icon>fas:chart-bar fa-fw</icon>
+                <action>RelatorioEventoMonitor</action>
+            </menuitem>      
         </menu>
     </menuitem>
 
@@ -22,56 +59,60 @@
         <Access></Access>
         <menu>
             <menuitem label='Eventos'>
-                <icon></icon>
-                <action>EventosView</action>
+                <icon>fas:calendar-check fa-fw</icon>
+                <action>EventoList</action>
             </menuitem>
             <menuitem>
-                <icon></icon>
-                <action>RelatorioEventosView</action>
+                <icon>fas:file-alt fa-fw</icon>
+                <action>RelatorioEvento</action>
             </menuitem>
             <menuitem>
-                <icon></icon>
-                <action>EventosFormView</action>
-            </menuitem>
-            <menuitem label='Inscrições'>
-                <icon></icon>
-                <action>InscricoesView</action>
-            </menuitem>
-            <menuitem>
-                <icon></icon>
-                <action>InscricoesFormView</action>
+                <icon>fas:calendar-plus fa-fw</icon>
+                <action>EventoForm</action>
             </menuitem>
             <menuitem label='Certificados'>
-                <icon></icon>
-                <action>CertificadosView</action>
+                <icon>fas:award fa-fw</icon>
+                <action>CertificadoList</action>
             </menuitem>
             <menuitem>
-                <icon></icon>
-                <action>CertificadosFormView</action>
+                <icon>fas:file-signature fa-fw</icon>
+                <action>CertificadoForm</action>
+            </menuitem>
+            <menuitem label='Inscrições'>
+                <icon>fas:users fa-fw</icon>
+                <action>InscricaoList</action>
+            </menuitem>
+            <menuitem>
+                <icon>fas:user-plus fa-fw</icon>
+                <action>InscricaoForm</action>
             </menuitem>
             <menuitem label='Pagamentos'>
-                <icon></icon>
-                <action>PagamentosView</action>
+                <icon>fas:file-invoice-dollar fa-fw</icon>
+                <action>PagamentoList</action>
             </menuitem>
             <menuitem>
-                <icon></icon>
-                <action>PagamentosFormView</action>
+                <icon>fas:funnel-dollar fa-fw</icon>
+                <action>PagamentoForm</action>
             </menuitem>
             <menuitem label='Registros'>
-                <icon></icon>
-                <action>RegistrosView</action>
+                <icon>fas:history fa-fw</icon>
+                <action>RegistroList</action>
             </menuitem>
             <menuitem>
-                <icon></icon>
-                <action>RegistrosFormView</action>
+                <icon>fas:edit fa-fw</icon>
+                <action>RegistroForm</action>
             </menuitem>
             <menuitem label='TCC'>
-                <icon></icon>
-                <action>TccsView</action>
+                <icon>fas:graduation-cap fa-fw</icon>
+                <action>TccList</action>
             </menuitem>
             <menuitem>
-                <icon></icon>
-                <action>TccsFormView</action>
+                <icon>fas:book fa-fw</icon>
+                <action>TccForm</action>
+            </menuitem>
+            <menuitem label='Aprovar Eventos'>
+                <icon>fas:check-double fa-fw</icon>
+                <action>AprovacaoEventoList</action>
             </menuitem>
         </menu>
     </menuitem>
@@ -91,19 +132,19 @@
                   <icon>fas:users fa-fw</icon>
                   <action>SystemGroupList</action>
               </menuitem>
-              <!-- <menuitem label='_t{Units}'>
+              <menuitem label='_t{Units}'>
                   <icon>fas:university fa-fw</icon>
                   <action>SystemUnitList</action>
               </menuitem>
               <menuitem label='_t{Roles}'>
                   <icon>fas:user-tag fa-fw</icon>
                   <action>SystemRoleList</action>
-              </menuitem> -->
+              </menuitem>
               <menuitem label='_t{Users}'>
                   <icon>fas:user fa-fw</icon>
                   <action>SystemUserList</action>
               </menuitem>
-              <!-- <menuitem label='_t{Page management}'>
+              <menuitem label='_t{Page management}'>
                     <icon>fab:wikipedia-w fa-fw</icon>
                     <action>SystemWikiList</action>
               </menuitem>
@@ -118,7 +159,7 @@
               <menuitem label='_t{Preferences}'>
                   <icon>fas:cog fa-fw</icon>
                   <action>SystemPreferenceForm#method=onEdit</action>
-              </menuitem> -->
+              </menuitem>
         </menu>
     </menuitem>
     
@@ -141,14 +182,14 @@
                   <icon>fas:database fa-fw</icon>
                   <action>SystemSqlLogList</action>
               </menuitem>
-              <!-- <menuitem label='_t{Request Log}'>
+              <menuitem label='_t{Request Log}'>
                   <icon>fas:globe fa-fw</icon>
                   <action>SystemRequestLogList</action>
               </menuitem>
               <menuitem label='_t{Schedules}'>
                   <icon>fas:clock fa-fw</icon>
                   <action>SystemScheduleLogList</action>
-              </menuitem> -->
+              </menuitem>
               <menuitem label='_t{PHP Log}'>
                   <icon>fas:exclamation-triangle fa-fw</icon>
                   <action>SystemPHPErrorLogView</action>

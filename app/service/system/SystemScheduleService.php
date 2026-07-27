@@ -2,14 +2,14 @@
 /**
  * SystemScheduleService
  *
- * @version    8.1
+ * @version    8.6
  * @package    service
  * @subpackage cli
  * @author     Pablo Dall'Oglio
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    https://adiantiframework.com.br/license-template
  */
-class SystemScheduleService
+class SystemScheduleService implements AdiantiJob
 {
     public static function run($request)
     {
@@ -37,10 +37,14 @@ class SystemScheduleService
                             ->where('minute',        '=', $minute)
                             ->where('active',        '=', 'Y')->load();
         
-        $s4 = SystemSchedule::where('schedule_type', '=', 'F')
+        $s4 = SystemSchedule::where('schedule_type', '=', 'H')
+                            ->where('minute',        '=', $minute)
                             ->where('active',        '=', 'Y')->load();
         
-        $schedules = array_merge($s1, $s2, $s3, $s4);
+        $s5 = SystemSchedule::where('schedule_type', '=', 'F')
+                            ->where('active',        '=', 'Y')->load();
+        
+        $schedules = array_merge($s1, $s2, $s3, $s4, $s5);
         TTransaction::close();
         
         foreach ($schedules as $schedule)

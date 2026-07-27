@@ -2,7 +2,7 @@
 /**
  * SystemSqlLogList
  *
- * @version    8.1
+ * @version    8.6
  * @package    control
  * @subpackage log
  * @author     Pablo Dall'Oglio
@@ -32,11 +32,13 @@ class SystemSqlLogList extends TStandardList
         parent::addFilterField('class_name', 'like'); // add a filter field
         parent::addFilterField('session_id', 'like'); // add a filter field
         parent::addFilterField('request_id', '='); // add a filter field
+        parent::addFilterField('logdate', '>=', 'start_date'); // add a filter field
+        parent::addFilterField('logdate', '<=', 'end_date'); // add a filter field
         parent::setLimit(20);
         
         // creates the form, with a table inside
         $this->form = new BootstrapFormBuilder('form_search_SystemSqlLog');
-        $this->form->setFormTitle('SQL Log');
+        $this->form->setFormTitle(_t('SQL Log'));
         
         // create the form fields
         $login       = new TEntry('login');
@@ -45,12 +47,16 @@ class SystemSqlLogList extends TStandardList
         $class_name  = new TEntry('class_name');
         $session_id  = new TEntry('session_id');
         $request_id  = new TEntry('request_id');
-
+        $start_date = new TDateTime('start_date');
+        $end_date = new TDateTime('end_date');
+        $start_date->setSize('100%');
+        $end_date->setSize('100%');
 
         // add the fields
         $this->form->addFields( [new TLabel(_t('Login'))], [$login], [new TLabel(_t('Program'))], [$class_name] );
         $this->form->addFields( [new TLabel(_t('Database'))], [$database], [new TLabel(_t('Session'))], [$session_id] );
         $this->form->addFields( [new TLabel('SQL')], [$sql], [new TLabel(_t('Request'))], [$request_id] );
+        $this->form->addFields( [new TLabel(_t('Start date'))], [$start_date], [new TLabel(_t('End date'))], [$end_date] );
         
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue('SystemSqlLog_filter_data') );

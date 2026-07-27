@@ -2,7 +2,7 @@
 /**
  * SystemAccessLogList
  *
- * @version    8.1
+ * @version    8.6
  * @package    control
  * @subpackage log
  * @author     Pablo Dall'Oglio
@@ -27,17 +27,21 @@ class SystemAccessLogList extends TStandardList
         parent::setActiveRecord('SystemAccessLog');   // defines the active record
         parent::setDefaultOrder('id', 'desc');         // defines the default order
         parent::addFilterField('login', 'like'); // add a filter field
+        parent::addFilterField('login_time', '>=', 'start_date'); // add a filter field
+        parent::addFilterField('login_time', '<=', 'end_date'); // add a filter field
         parent::setLimit(20);
         
         // creates the form, with a table inside
         $this->form = new BootstrapFormBuilder('form_search_SystemAccessLog');
-        $this->form->setFormTitle('Access Log');
+        $this->form->setFormTitle(_t('Access Log'));
         
         // create the form fields
         $login = new TEntry('login');
+        $start_date = new TDateTime('start_date');
+        $end_date = new TDateTime('end_date');
 
         // add the fields
-        $this->form->addFields( [new TLabel(_t('Login'))], [$login] );
+        $this->form->addFields( [new TLabel(_t('Login'))], [$login], [new TLabel(_t('Start date'))], [$start_date], [new TLabel(_t('End date'))], [$end_date] );
         $login->setSize('70%');
         
         // keep the form filled during navigation with session data
@@ -50,6 +54,7 @@ class SystemAccessLogList extends TStandardList
         // creates a DataGrid
         $this->datagrid = new BootstrapDatagridWrapper(new TQuickGrid);
         $this->datagrid->style = 'width: 100%';
+        $this->datagrid->class .= ' vertical-middle';
         $this->datagrid->setHeight(320);
         
 
@@ -87,7 +92,20 @@ class SystemAccessLogList extends TStandardList
                 $div->style = "text-shadow:none; font-size:12px";
                 $div->add(_t('Impersonated'));
                 
-                return $value . ' ' . $div;
+                return $value . ' <br> ' . $div;
+            }
+            return $value;
+        });
+        
+        $impersonated_by->setTransformer( function($value, $object, $row) {
+            if ($object->impersonated_by == '***SSO***')
+            {
+                $div = new TElement('span');
+                $div->class = "label label-warning";
+                $div->style = "text-shadow:none; font-size:12px";
+                $div->add('SSO');
+                
+                return $div;
             }
             return $value;
         });

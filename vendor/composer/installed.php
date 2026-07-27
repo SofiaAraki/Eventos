@@ -1,303 +1,308 @@
-<?php return array(
-    'root' => array(
-        'name' => '__root__',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => '5f77dfd5599e34c56047a4095c64207838329cc8',
-        'type' => 'library',
-        'install_path' => __DIR__ . '/../../',
-        'aliases' => array(),
-        'dev' => true,
+<?php return array (
+  'root' => 
+  array (
+    'pretty_version' => 'dev-master',
+    'version' => 'dev-master',
+    'aliases' => 
+    array (
     ),
-    'versions' => array(
-        '__root__' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '5f77dfd5599e34c56047a4095c64207838329cc8',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../../',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'adianti/barcode-document' => array(
-            'pretty_version' => 'v1.0.0',
-            'version' => '1.0.0.0',
-            'reference' => 'a251ae15583fc99137d8bbd2284541319af742d2',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../adianti/barcode-document',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'adianti/html-document' => array(
-            'pretty_version' => 'v1.0.0',
-            'version' => '1.0.0.0',
-            'reference' => '76c5af4c4515724d6e22f968ba22a49b83711bd1',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../adianti/html-document',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'adianti/pdfdesigner' => array(
-            'pretty_version' => 'v1.0.0',
-            'version' => '1.0.0.0',
-            'reference' => 'd145c44530af6a5f285ec00d7fffd5d6d8085bbb',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../adianti/pdfdesigner',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'adianti/plugins' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '53e2704203635915f3375dbdb66a97af52c56e6c',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../adianti/plugins',
-            'aliases' => array(
-                0 => '9999999-dev',
-            ),
-            'dev_requirement' => false,
-        ),
-        'adianti/studio-forms' => array(
-            'pretty_version' => 'v1.0.0',
-            'version' => '1.0.0.0',
-            'reference' => '1fd4b7de085d33ecb5860fca992ee100b1cc70f2',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../adianti/studio-forms',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'adianti/table-writers' => array(
-            'pretty_version' => 'v1.0.0',
-            'version' => '1.0.0.0',
-            'reference' => 'b6a8bdae279fd4059ee27d480e77c0685524fbd8',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../adianti/table-writers',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'bacon/bacon-qr-code' => array(
-            'pretty_version' => 'v3.0.1',
-            'version' => '3.0.1.0',
-            'reference' => 'f9cc1f52b5a463062251d666761178dbdb6b544f',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../bacon/bacon-qr-code',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'dasprid/enum' => array(
-            'pretty_version' => '1.0.6',
-            'version' => '1.0.6.0',
-            'reference' => '8dfd07c6d2cf31c8da90c53b83c026c7696dda90',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../dasprid/enum',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'dompdf/dompdf' => array(
-            'pretty_version' => 'v3.1.0',
-            'version' => '3.1.0.0',
-            'reference' => 'a51bd7a063a65499446919286fb18b518177155a',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../dompdf/dompdf',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'dompdf/php-font-lib' => array(
-            'pretty_version' => '1.0.1',
-            'version' => '1.0.1.0',
-            'reference' => '6137b7d4232b7f16c882c75e4ca3991dbcf6fe2d',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../dompdf/php-font-lib',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'dompdf/php-svg-lib' => array(
-            'pretty_version' => '1.0.0',
-            'version' => '1.0.0.0',
-            'reference' => 'eb045e518185298eb6ff8d80d0d0c6b17aecd9af',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../dompdf/php-svg-lib',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'firebase/php-jwt' => array(
-            'pretty_version' => 'v6.11.1',
-            'version' => '6.11.1.0',
-            'reference' => 'd1e91ecf8c598d073d0995afa8cd5c75c6e19e66',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../firebase/php-jwt',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'jfcherng/php-color-output' => array(
-            'pretty_version' => '3.0.0',
-            'version' => '3.0.0.0',
-            'reference' => '6c7bf16686cc6a291647fcb87491640a2d5edd20',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../jfcherng/php-color-output',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'jfcherng/php-diff' => array(
-            'pretty_version' => '6.16.2',
-            'version' => '6.16.2.0',
-            'reference' => '7f46bcfc582e81769237d0b3f6b8a548efe8799d',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../jfcherng/php-diff',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'jfcherng/php-mb-string' => array(
-            'pretty_version' => '2.0.1',
-            'version' => '2.0.1.0',
-            'reference' => '8407bfefde47849c9e7c9594e6de2ac85a0f845d',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../jfcherng/php-mb-string',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'jfcherng/php-sequence-matcher' => array(
-            'pretty_version' => '4.0.3',
-            'version' => '4.0.3.0',
-            'reference' => 'd2038ac29627340a7458609072a8ba355e80ec5b',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../jfcherng/php-sequence-matcher',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'linfo/linfo' => array(
-            'pretty_version' => 'v4.0.8',
-            'version' => '4.0.8.0',
-            'reference' => 'cddc6963dc507342bc3b6bf828cf87fe2aa55a2e',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../linfo/linfo',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'masterminds/html5' => array(
-            'pretty_version' => '2.9.0',
-            'version' => '2.9.0.0',
-            'reference' => 'f5ac2c0b0a2eefca70b2ce32a5809992227e75a6',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../masterminds/html5',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'pablodalloglio/fpdf' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => 'd618db8f2b8549613c3b5b31e6afd9915bda9330',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../pablodalloglio/fpdf',
-            'aliases' => array(
-                0 => '9999999-dev',
-            ),
-            'dev_requirement' => false,
-        ),
-        'pablodalloglio/ole' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '7f363227708424cdc6ff9ca4764f59895b4b27a8',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../pablodalloglio/ole',
-            'aliases' => array(
-                0 => '9999999-dev',
-            ),
-            'dev_requirement' => false,
-        ),
-        'pablodalloglio/phprtflite' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => 'df62039947efea1c20568b624553e0e9ba1adbea',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../pablodalloglio/phprtflite',
-            'aliases' => array(
-                0 => '9999999-dev',
-            ),
-            'dev_requirement' => false,
-        ),
-        'pablodalloglio/spreadsheet_excel_writer' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '21022df9029a58f2f812bfcb1879a1f83678d571',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../pablodalloglio/spreadsheet_excel_writer',
-            'aliases' => array(
-                0 => '9999999-dev',
-            ),
-            'dev_requirement' => false,
-        ),
-        'paragonie/constant_time_encoding' => array(
-            'pretty_version' => 'v3.0.0',
-            'version' => '3.0.0.0',
-            'reference' => 'df1e7fde177501eee2037dd159cf04f5f301a512',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../paragonie/constant_time_encoding',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'phpmailer/phpmailer' => array(
-            'pretty_version' => 'v6.10.0',
-            'version' => '6.10.0.0',
-            'reference' => 'bf74d75a1fde6beaa34a0ddae2ec5fce0f72a144',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../phpmailer/phpmailer',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'picqer/php-barcode-generator' => array(
-            'pretty_version' => 'v3.2.1',
-            'version' => '3.2.1.0',
-            'reference' => 'c99ca79268eea35a0b3e1d4db341bc154d23592f',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../picqer/php-barcode-generator',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'psr/clock' => array(
-            'pretty_version' => '1.0.0',
-            'version' => '1.0.0.0',
-            'reference' => 'e41a24703d4560fd0acb709162f73b8adfc3aa0d',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../psr/clock',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'sabberworm/php-css-parser' => array(
-            'pretty_version' => 'v8.8.0',
-            'version' => '8.8.0.0',
-            'reference' => '3de493bdddfd1f051249af725c7e0d2c38fed740',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../sabberworm/php-css-parser',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'spomky-labs/otphp' => array(
-            'pretty_version' => '11.3.0',
-            'version' => '11.3.0.0',
-            'reference' => '2d8ccb5fc992b9cc65ef321fa4f00fefdb3f4b33',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../spomky-labs/otphp',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'symfony/deprecation-contracts' => array(
-            'pretty_version' => 'v3.5.1',
-            'version' => '3.5.1.0',
-            'reference' => '74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/deprecation-contracts',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'tburry/pquery' => array(
-            'pretty_version' => 'v1.1.1',
-            'version' => '1.1.1.0',
-            'reference' => '872339ffd38d261c4417ea1855428b1b4ff9abf1',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../tburry/pquery',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
+    'reference' => '4ed32c728b96353673456479287fa2b87f45838b',
+    'name' => '__root__',
+  ),
+  'versions' => 
+  array (
+    '__root__' => 
+    array (
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '4ed32c728b96353673456479287fa2b87f45838b',
     ),
+    'adianti/barcode-document' => 
+    array (
+      'pretty_version' => 'v1.0.0',
+      'version' => '1.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'a251ae15583fc99137d8bbd2284541319af742d2',
+    ),
+    'adianti/html-document' => 
+    array (
+      'pretty_version' => 'v1.0.0',
+      'version' => '1.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '76c5af4c4515724d6e22f968ba22a49b83711bd1',
+    ),
+    'adianti/pdfdesigner' => 
+    array (
+      'pretty_version' => 'v1.0.0',
+      'version' => '1.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'd145c44530af6a5f285ec00d7fffd5d6d8085bbb',
+    ),
+    'adianti/plugins' => 
+    array (
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
+      'aliases' => 
+      array (
+        0 => '9999999-dev',
+      ),
+      'reference' => '53e2704203635915f3375dbdb66a97af52c56e6c',
+    ),
+    'adianti/studio-forms' => 
+    array (
+      'pretty_version' => 'v1.0.0',
+      'version' => '1.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '1fd4b7de085d33ecb5860fca992ee100b1cc70f2',
+    ),
+    'adianti/table-writers' => 
+    array (
+      'pretty_version' => 'v1.0.0',
+      'version' => '1.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'b6a8bdae279fd4059ee27d480e77c0685524fbd8',
+    ),
+    'bacon/bacon-qr-code' => 
+    array (
+      'pretty_version' => 'v3.1.1',
+      'version' => '3.1.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2',
+    ),
+    'dasprid/enum' => 
+    array (
+      'pretty_version' => '1.0.7',
+      'version' => '1.0.7.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'b5874fa9ed0043116c72162ec7f4fb50e02e7cce',
+    ),
+    'dompdf/dompdf' => 
+    array (
+      'pretty_version' => 'v3.1.5',
+      'version' => '3.1.5.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'f11ead23a8a76d0ff9bbc6c7c8fd7e05ca328496',
+    ),
+    'dompdf/php-font-lib' => 
+    array (
+      'pretty_version' => '1.0.2',
+      'version' => '1.0.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'a6e9a688a2a80016ac080b97be73d3e10c444c9a',
+    ),
+    'dompdf/php-svg-lib' => 
+    array (
+      'pretty_version' => '1.0.2',
+      'version' => '1.0.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8259ffb930817e72b1ff1caef5d226501f3dfeb1',
+    ),
+    'firebase/php-jwt' => 
+    array (
+      'pretty_version' => 'v6.11.1',
+      'version' => '6.11.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'd1e91ecf8c598d073d0995afa8cd5c75c6e19e66',
+    ),
+    'jfcherng/php-color-output' => 
+    array (
+      'pretty_version' => '3.0.0',
+      'version' => '3.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '6c7bf16686cc6a291647fcb87491640a2d5edd20',
+    ),
+    'jfcherng/php-diff' => 
+    array (
+      'pretty_version' => '6.16.3',
+      'version' => '6.16.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '6d7332b6080cdd50011a364b58f24c8d0cdeb5da',
+    ),
+    'jfcherng/php-mb-string' => 
+    array (
+      'pretty_version' => '2.0.1',
+      'version' => '2.0.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8407bfefde47849c9e7c9594e6de2ac85a0f845d',
+    ),
+    'jfcherng/php-sequence-matcher' => 
+    array (
+      'pretty_version' => '4.0.3',
+      'version' => '4.0.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'd2038ac29627340a7458609072a8ba355e80ec5b',
+    ),
+    'linfo/linfo' => 
+    array (
+      'pretty_version' => 'v4.0.9',
+      'version' => '4.0.9.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '3228a8d35d7f4214aded8f68dffa907de79c0cab',
+    ),
+    'masterminds/html5' => 
+    array (
+      'pretty_version' => '2.10.1',
+      'version' => '2.10.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'fd5018f6815fff903946d0564977b44ce8010e29',
+    ),
+    'pablodalloglio/fpdf' => 
+    array (
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
+      'aliases' => 
+      array (
+        0 => '9999999-dev',
+      ),
+      'reference' => 'd618db8f2b8549613c3b5b31e6afd9915bda9330',
+    ),
+    'pablodalloglio/ole' => 
+    array (
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
+      'aliases' => 
+      array (
+        0 => '9999999-dev',
+      ),
+      'reference' => '7f363227708424cdc6ff9ca4764f59895b4b27a8',
+    ),
+    'pablodalloglio/phprtflite' => 
+    array (
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
+      'aliases' => 
+      array (
+        0 => '9999999-dev',
+      ),
+      'reference' => 'df62039947efea1c20568b624553e0e9ba1adbea',
+    ),
+    'pablodalloglio/spreadsheet_excel_writer' => 
+    array (
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
+      'aliases' => 
+      array (
+        0 => '9999999-dev',
+      ),
+      'reference' => '21022df9029a58f2f812bfcb1879a1f83678d571',
+    ),
+    'paragonie/constant_time_encoding' => 
+    array (
+      'pretty_version' => 'v3.1.3',
+      'version' => '3.1.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'd5b01a39b3415c2cd581d3bd3a3575c1ebbd8e77',
+    ),
+    'phpmailer/phpmailer' => 
+    array (
+      'pretty_version' => 'v6.12.0',
+      'version' => '6.12.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'd1ac35d784bf9f5e61b424901d5a014967f15b12',
+    ),
+    'picqer/php-barcode-generator' => 
+    array (
+      'pretty_version' => 'v3.2.4',
+      'version' => '3.2.4.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '16a5cfb74eb8b7a0aa2e60427d98599aa8259380',
+    ),
+    'psr/clock' => 
+    array (
+      'pretty_version' => '1.0.0',
+      'version' => '1.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'e41a24703d4560fd0acb709162f73b8adfc3aa0d',
+    ),
+    'sabberworm/php-css-parser' => 
+    array (
+      'pretty_version' => 'v9.4.0',
+      'version' => '9.4.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'fd3bf9fb173e0df649bc4e3e0d088a1b2417c08f',
+    ),
+    'spomky-labs/otphp' => 
+    array (
+      'pretty_version' => '11.5.0',
+      'version' => '11.5.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '877683d6352b80cdc7020fd43a725629c2524435',
+    ),
+    'symfony/deprecation-contracts' => 
+    array (
+      'pretty_version' => 'v3.7.0',
+      'version' => '3.7.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '50f59d1f3ca46d41ac911f97a78626b6756af35b',
+    ),
+    'tburry/pquery' => 
+    array (
+      'pretty_version' => 'v1.1.1',
+      'version' => '1.1.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '872339ffd38d261c4417ea1855428b1b4ff9abf1',
+    ),
+    'thecodingmachine/safe' => 
+    array (
+      'pretty_version' => 'v3.4.0',
+      'version' => '3.4.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '705683a25bacf0d4860c7dea4d7947bfd09eea19',
+    ),
+  ),
 );

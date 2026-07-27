@@ -2,7 +2,7 @@
 /**
  * LoginForm
  *
- * @version    8.1
+ * @version    8.6
  * @package    control
  * @subpackage admin
  * @author     Pablo Dall'Oglio
@@ -41,10 +41,7 @@ class LoginForm extends TPage
         $previous_method     = new THidden('previous_method');
         $previous_parameters = new THidden('previous_parameters');
         
-        $login->setMask('999.999.999-99');
-        $login->placeholder = 'CPF';
-        
-        //$login->disableAutoComplete();
+        $login->disableAutoComplete();
         $password->disableAutoComplete();
         $login->setSize('100%');
         $password->setSize('100%');
@@ -53,7 +50,7 @@ class LoginForm extends TPage
         $password->disableToggleVisibility();
         $login->autofocus = 'autofocus';
         
-        $this->form->addRowField(_t('Login'), $login, true );
+        $this->form->addRowField('CPF', $login, true );
         $this->form->addRowField(_t('Password'), $password, true );
         
         $this->form->addRowContent( $previous_class );
@@ -62,23 +59,22 @@ class LoginForm extends TPage
         
         if (!empty($ini['general']['multiunit']) and $ini['general']['multiunit'] == '1')
         {
-            $unit_id = new THidden( 'multiunit' );
-            //$unit_id->setSize('100%');
-            //$login->setExitAction(new TAction( [$this, 'onExitUser'] ) );
-            $unit_id->setValue( '1' );
-
-            $this->form->addField( $unit_id );
+            $unit_id = new TCombo('unit_id');
+            $unit_id->setSize('100%');
+            $login->setExitAction(new TAction( [$this, 'onExitUser'] ) );
+            
+            $this->form->addRowField(_t('Unit'), $unit_id, true );
         }
         
         if (!empty($ini['general']['multi_lang']) and $ini['general']['multi_lang'] == '1')
         {
-            $lang_id = new THidden('lang_id');
-            //$lang_id->setSize('100%');
-            //$lang_id->addItems( $ini['general']['lang_options'] );
-            $lang_id->setValue( 'Português' );
-            //$lang_id->setDefaultOption(FALSE);
+            $lang_id = new TCombo('lang_id');
+            $lang_id->setSize('100%');
+            $lang_id->addItems( $ini['general']['lang_options'] );
+            $lang_id->setValue( $ini['general']['language'] );
+            $lang_id->setDefaultOption(FALSE);
             
-            $this->form->addField( $lang_id );
+            $this->form->addRowField(_t('Language'), $lang_id, true );
         }
         
         if (!empty($ini['recaptcha']) && $ini['recaptcha']['enabled'] == '1')
@@ -87,17 +83,17 @@ class LoginForm extends TPage
             $this->form->addRowContent( $recaptcha_html );
         }
         
-        // if (!empty($param['previous_class']) && $param['previous_class'] !== 'LoginForm')
-        // {
-        //     $previous_class->setValue($param['previous_class']);
+        if (!empty($param['previous_class']) && $param['previous_class'] !== 'LoginForm')
+        {
+            $previous_class->setValue($param['previous_class']);
             
-        //     if (!empty($param['previous_method']))
-        //     {
-        //         $previous_method->setValue($param['previous_method']);
-        //     }
+            if (!empty($param['previous_method']))
+            {
+                $previous_method->setValue($param['previous_method']);
+            }
             
-        //     $previous_parameters->setValue(base64_encode(json_encode($param)));
-        // }
+            $previous_parameters->setValue(base64_encode(json_encode($param)));
+        }
         
         $this->form->addAction(_t('Log in'), new TAction([$this, 'onLogin']), '' );
         
@@ -110,7 +106,9 @@ class LoginForm extends TPage
         {
             $this->form->addFooterAction(_t('Reset password'), new TAction(['SystemRequestPasswordResetForm', 'onLoad']), '');
         }
-        
+
+        $this->form->addFooterAction('Validar Certificado', new TAction(['Validador', 'onShow']), '');
+
         // add the form to the page
         parent::add($this->form);
     }
@@ -119,36 +117,36 @@ class LoginForm extends TPage
      * user exit action
      * Populate unit combo
      */
-    // public static function onExitUser($param)
-    // {
-    //     try
-    //     {
-    //         TTransaction::open('permission');
+    public static function onExitUser($param)
+    {
+        try
+        {
+            TTransaction::open('permission');
             
-    //         $user = SystemUser::newFromLogin( $param['login'] );
-    //         if ($user instanceof SystemUser)
-    //         {
-    //             $units = $user->getSystemUserUnits();
-    //             $options = [];
+            $user = SystemUser::newFromLogin( $param['login'] );
+            if ($user instanceof SystemUser)
+            {
+                $units = $user->getSystemUserUnits();
+                $options = [];
                 
-    //             if ($units)
-    //             {
-    //                 foreach ($units as $unit)
-    //                 {
-    //                     $options[$unit->id] = $unit->name;
-    //                 }
-    //             }
-    //             TCombo::reload('form_login', 'unit_id', $options);
-    //         }
+                if ($units)
+                {
+                    foreach ($units as $unit)
+                    {
+                        $options[$unit->id] = $unit->name;
+                    }
+                }
+                TCombo::reload('form_login', 'unit_id', $options);
+            }
             
-    //         TTransaction::close();
-    //     }
-    //     catch (Exception $e)
-    //     {
-    //         new TMessage('error',$e->getMessage());
-    //         TTransaction::rollback();
-    //     }
-    // }
+            TTransaction::close();
+        }
+        catch (Exception $e)
+        {
+            new TMessage('error',$e->getMessage());
+            TTransaction::rollback();
+        }
+    }
     
     /**
      * Authenticate the User
@@ -166,10 +164,10 @@ class LoginForm extends TPage
             (new TRequiredValidator)->validate( _t('Login'),    $data->login);
             (new TRequiredValidator)->validate( _t('Password'), $data->password);
             
-            // if (!empty($ini['general']['multiunit']) and $ini['general']['multiunit'] == '1')
-            // {
-            //     (new TRequiredValidator)->validate( _t('Unit'), $data->unit_id);
-            // }
+            if (!empty($ini['general']['multiunit']) and $ini['general']['multiunit'] == '1')
+            {
+                (new TRequiredValidator)->validate( _t('Unit'), $data->unit_id);
+            }
             
             if (!empty($ini['general']['require_terms']) && $ini['general']['require_terms'] == '1' && !empty($param['usage_term_policy']) AND empty($data->accept))
             {
@@ -205,6 +203,7 @@ class LoginForm extends TPage
                 ApplicationAuthenticationService::loadSessionVars($user, true);
                 ApplicationAuthenticationService::setUnit( $data->unit_id ?? null );
                 ApplicationAuthenticationService::setLang( $data->lang_id ?? null );
+                ApplicationAuthenticationService::onAfterLogin();
                 SystemAccessLogService::registerLogin();
                 SystemAccessNotificationLogService::registerLogin();
                 
@@ -400,6 +399,7 @@ class LoginForm extends TPage
      */
     public static function onLogout()
     {
+        ApplicationAuthenticationService::onBeforeLogout();
         SystemAccessLogService::registerLogout();
         TSession::freeSession();
         AdiantiCoreApplication::gotoPage('LoginForm', '');

@@ -2,7 +2,7 @@
 /**
  * SystemRegistrationForm
  *
- * @version    8.1
+ * @version    8.6
  * @package    control
  * @subpackage admin
  * @author     Pablo Dall'Oglio
@@ -28,7 +28,6 @@ class SystemRegistrationForm extends TPage
         
         // create the form fields
         $login      = new TEntry('login');
-        $login->setMask('999.999.999-99');
         $name       = new TEntry('name');
         $email      = new TEntry('email');
         $password   = new TPassword('password');
@@ -124,10 +123,10 @@ class SystemRegistrationForm extends TPage
                 throw new Exception(TAdiantiCoreTranslator::translate('The field ^1 is required', _t('Password confirmation')));
             }
             
-            // if (isset($ini['general']['validate_strong_pass']) && $ini['general']['validate_strong_pass'] == '1')
-            // {
-            //     (new TStrongPasswordValidator)->validate(_t('Password'), $param['password']);
-            // }
+            if (isset($ini['general']['validate_strong_pass']) && $ini['general']['validate_strong_pass'] == '1')
+            {
+                (new TStrongPasswordValidator)->validate(_t('Password'), $param['password']);
+            }
             
             if (SystemUser::newFromLogin($param['login']) instanceof SystemUser)
             {

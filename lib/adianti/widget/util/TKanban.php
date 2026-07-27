@@ -17,11 +17,11 @@ use Exception;
 /**
  * Kanban
  *
- * @version    8.1
+ * @version    8.6
  * @package    widget
  * @subpackage util
- * @author     Artur Comunello
  * @author     Pablo Dall'Oglio
+ * @author     Artur Comunello (up to version 7.0)
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    https://adiantiframework.com.br/license
  */
@@ -44,6 +44,7 @@ class TKanban extends TElement
     protected $searchForm;
     protected $editForm;
     protected $metadata;
+    protected $dragScroll;
     
     /**
      * Class Constructor
@@ -57,6 +58,8 @@ class TKanban extends TElement
         $this->stageActions   = [];
         $this->stageShortcuts = [];
         $this->topScrollbar   = false;
+        $this->metadata       = [];
+        $this->dragScroll     = false;
         
         $this->kanban                 = new TElement('div');
         $this->kanban->{'id'}         = 'tkanban_' . mt_rand(1000000000, 1999999999);
@@ -78,6 +81,18 @@ class TKanban extends TElement
     public function enableTopScrollbar()
     {
         $this->topScrollbar = true;
+    }
+    
+    /**
+     * Enable Drag Scroll
+     */
+    public function enableDragScroll()
+    {
+        if (!empty($this->stageDropAction))
+        {
+            throw new Exception(AdiantiCoreTranslator::translate('The method ^1 cannot be used together with the method ^2', 'enableDragScroll()', 'setStageDropAction()'));
+        }
+        $this->dragScroll = true;
     }
     
     /**
@@ -216,6 +231,11 @@ class TKanban extends TElement
      */
     public function setStageDropAction(TAction $action)
     {
+        if ($this->dragScroll)
+        {
+            throw new Exception(AdiantiCoreTranslator::translate('The method ^1 cannot be used together with the method ^2', 'enableDragScroll()', 'setStageDropAction()'));
+        }
+        
         if ($action->isStatic())
         {
             $this->stageDropAction = $action;
@@ -508,6 +528,22 @@ class TKanban extends TElement
                     $action->{'type'}      = 'button';
                     $action->{'generator'} = 'adianti';
                     $action->{'href'}      = $url;
+                    
+                    if (!empty($actionTemplate->title))
+                    {
+                        $action->{'title'} = $actionTemplate->title;
+                    }
+                    
+                    if ($actionTemplate->action->isPopover())
+                    {
+                        unset($action->{'href'});
+                        unset($action->{'generator'});
+                        
+                        $action->{'popaction'} = $itemAction->serialize(false);
+                        $action->{'poptrigger'} = 'click';
+                        $action->{'data-popover'} = 'true';
+                    }
+                    
                     $action->add($icon);
                     $action->add(TElement::tag('span', $actionTemplate->label));
                     
@@ -534,7 +570,7 @@ class TKanban extends TElement
      */
     private function renderStageActions($stage_id, $stage)
     {
-        $icon = new TImage('fa:ellipsis-vertical');
+        $icon = new TImage('fa:ellipsis');
         $icon->{'data-toggle'} = 'dropdown';
         $icon->{'data-bs-toggle'} = 'dropdown';
         
@@ -620,6 +656,7 @@ class TKanban extends TElement
     {
         $this->renderStages();
         $this->add($this->kanban);
+        $this->{'id'} = 'wrapper_'. $this->kanban->{'id'};
         $this->{'style'} .= ';overflow-x:auto';
         $this->{'class'}  = 'kanban-board-wrapper';
         
@@ -633,13 +670,19 @@ class TKanban extends TElement
             $stage_drop_action_string = $this->stageDropAction->serialize();
             TScript::create("kanban_start_board('{$this->kanban->id}', '{$stage_drop_action_string}');");
         }
-
+        
         if (!empty($this->itemDropAction))
         {
             $item_drop_action_string = $this->itemDropAction->serialize();
             TScript::create("kanban_start_item('{$this->kanban->item_class}', '{$item_drop_action_string}');");
         }
-
+        
+        if ($this->dragScroll)
+        {
+            TScript::create("kanban_drag_scroll('{$this->id}');");
+            $this->{'style'} .= ';user-select:none';
+        }
+        
         parent::show();
     }
 }

@@ -9,7 +9,17 @@ class Banca extends TRecord
     {
         parent::__construct($id_banca, $callObjectLoad);
         parent::addAttribute('id_tcc');
-        parent::addAttribute('banca');
+        parent::addAttribute('id_banca_usuario');
     }
 
+    public function get_usuario()
+    {
+        return new SystemUser($this->id_banca_usuario);
+    }
+
+    public function get_usuario_name()
+    {
+        $usuario = $this->get_usuario();
+        return $usuario ? $usuario->name : '-';
+    }
 }

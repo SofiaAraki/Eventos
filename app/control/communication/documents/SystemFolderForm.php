@@ -2,7 +2,7 @@
 /**
  * SystemFolderForm
  *
- * @version    8.1
+ * @version    8.6
  * @package    control
  * @subpackage communication
  * @author     Pablo Dall'Oglio

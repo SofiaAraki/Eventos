@@ -8,7 +8,7 @@ use Exception;
 /**
  * Singleton manager for database connections
  *
- * @version    8.1
+ * @version    8.6
  * @package    database
  * @author     Pablo Dall'Oglio
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
@@ -100,7 +100,7 @@ class TConnection
 
                     if ($zone)
                     {
-                        $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET time_zone = '{$zone}'");
+                        $options = array(Pdo\Mysql::ATTR_INIT_COMMAND => "SET time_zone = '{$zone}'");
                     }
 
                     $conn = new PDO("mysql:host={$host};port={$port};dbname={$name}{$opts}", $user, $pass, $options);
@@ -108,12 +108,12 @@ class TConnection
                 elseif ($char == 'utf8mb4')
                 {
                     $zone = $zone ? ";SET time_zone = '{$zone}'" : "";
-                    $conn = new PDO("mysql:host={$host};port={$port};dbname={$name}{$opts}", $user, $pass, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4{$zone}"));
+                    $conn = new PDO("mysql:host={$host};port={$port};dbname={$name}{$opts}", $user, $pass, array(Pdo\Mysql::ATTR_INIT_COMMAND => "SET NAMES utf8mb4{$zone}"));
                 }
                 else
                 {
                     $zone = $zone ? ";SET time_zone = '{$zone}'" : "";
-                    $conn = new PDO("mysql:host={$host};port={$port};dbname={$name}{$opts}", $user, $pass, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8{$zone}"));
+                    $conn = new PDO("mysql:host={$host};port={$port};dbname={$name}{$opts}", $user, $pass, array(Pdo\Mysql::ATTR_INIT_COMMAND => "SET NAMES utf8{$zone}"));
                 }
                 break;
             case 'sqlite':
@@ -238,6 +238,10 @@ class TConnection
             $conn-> setAttribute (PDO::ATTR_CASE, PDO::CASE_NATURAL);
         }
         
+        if (!empty($db['init']))
+        {
+            $conn-> query( $db['init'] );
+        }
         // return the PDO object
         return $conn;
     }
@@ -262,12 +266,20 @@ class TConnection
         {
             // read the INI and retuns an array
             $ini = parse_ini_file($filei);
+            if (is_array($ini))
+            {
+                $ini['file'] = $database;
+            }
             self::$conn_cache[ $database ] = $ini;
             return $ini;
         }
         else if (file_exists($filep))
         {
             $ini = require $filep;
+            if (is_array($ini))
+            {
+                $ini['file'] = $database;
+            }
             self::$conn_cache[ $database ] = $ini;
             return $ini;
         }

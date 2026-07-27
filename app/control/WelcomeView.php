@@ -2,7 +2,7 @@
 /**
  * WelcomeView
  *
- * @version    8.1
+ * @version    8.6
  * @package    control
  * @author     Pablo Dall'Oglio
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
@@ -10,6 +10,10 @@
  */
 class WelcomeView extends TPage
 {
+    /**
+     * Class constructor
+     * Creates the page
+     */
     function __construct()
     {
         parent::__construct();
@@ -28,19 +32,3 @@ class WelcomeView extends TPage
         parent::add( $this->html );
     }
 }
-
-
-    // public function delete($id = NULL)
-    // {
-    //     $id = $id ?? $this->id_inscricao;
-
-    //     // Exclui todos os pagamentos relacionados
-    //     $pagamentos = Pagamentos::where('id_inscricao', '=', $id)->load();
-
-    //     foreach ($pagamentos as $pagamento) {
-    //         $pagamento->delete();
-    //     }
-
-    //     // Agora exclui a inscrição normalmente
-    //     parent::delete($id);
-    // }

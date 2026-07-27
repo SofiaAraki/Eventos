@@ -147,3 +147,4 @@ CREATE INDEX sys_sqlchanges_dbname_idx  ON system_sql_changes (db_name);
 CREATE INDEX sys_sqlchanges_sqldate_idx ON system_sql_changes (sql_date);
 CREATE INDEX sys_sqlchanges_sqlhash_idx ON system_sql_changes (sql_hash);
 
+CREATE INDEX sys_access_log_session_idx ON system_access_log (sessionid);

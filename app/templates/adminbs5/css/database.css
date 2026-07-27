@@ -78,6 +78,8 @@
 #table_list_container .table-list .card .card-header.card-item-title
 {
     background: var(--bs-light-bg-subtle) !important;
+    border-bottom: 0;
+    font-weight: bold;
 }
 
 #table_list_container .card .card-header.card-item-title

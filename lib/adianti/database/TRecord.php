@@ -24,7 +24,7 @@ use Traversable;
 /**
  * Base class for Active Records
  *
- * @version    8.1
+ * @version    8.6
  * @package    database
  * @author     Pablo Dall'Oglio
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
@@ -38,6 +38,7 @@ abstract class TRecord implements IteratorAggregate
     protected $trashed;
     protected $writers;
     protected $readers;
+    protected static $request_cache;
     
     /**
      * Class Constructor
@@ -450,6 +451,23 @@ abstract class TRecord implements IteratorAggregate
     }
     
     /**
+     * Returns the attribute that identify the user
+     * @return A String containing the USERBYATT constant
+     */
+    public static function getUserByAttribute()
+    {
+        // get the Active Record class name
+        $class = get_called_class();
+        if(defined("{$class}::USERBYATT"))
+        {
+            // returns the DELETEDBY Active Record class constant
+            return constant("{$class}::USERBYATT");
+        }
+
+        return NULL;
+    }
+    
+    /**
      * Returns the information related to the logged user
      * @return A String containing user login or id or custom code
      */
@@ -466,6 +484,17 @@ abstract class TRecord implements IteratorAggregate
         }
         
         return TSession::getValue($session_var);
+    }
+    
+    /**
+     * Returns if the user is the record owner
+     */
+    public function isCreatedBySessionUser()
+    {
+        $created_by    = $this->getCreatedByColumn();
+        $session_value = $this->getByUserSessionIdentificator();
+        
+        return ($this->$created_by == $session_value);
     }
     
     /**
@@ -732,6 +761,18 @@ abstract class TRecord implements IteratorAggregate
                                      bin2hex(chr((ord(random_bytes(1)) & 0x3F) | 0x80)) . bin2hex(random_bytes(1)),
                                      bin2hex(random_bytes(6))
                                  ]);
+                }
+                else if ((defined("{$class}::IDPOLICY")) AND (constant("{$class}::IDPOLICY") == 'uuid7'))
+                {
+                    $ts = (int)(microtime(true) * 1000);
+                
+                    $this->$pk =  implode('-', [
+                        bin2hex(pack('N', $ts >> 16)),
+                        bin2hex(pack('n', $ts & 0xFFFF)),
+                        bin2hex(chr((ord(random_bytes(1)) & 0x0F) | 0x70)) . bin2hex(random_bytes(1)),
+                        bin2hex(chr((ord(random_bytes(1)) & 0x3F) | 0x80)) . bin2hex(random_bytes(1)),
+                        bin2hex(random_bytes(6))
+                    ]);
                 }
                 else
                 {
@@ -1562,6 +1603,29 @@ abstract class TRecord implements IteratorAggregate
     }
     
     /**
+     * Returns the dependency informatation for some class
+     * @param $class Active Record Class name
+     */
+    public function findDependencyFor($class)
+    {
+        if (method_exists($this, 'get_relationships'))
+        {
+            $relationships = $this->get_relationships();
+            
+            if (!empty($relationships['dependencies']))
+            {
+                foreach ($relationships['dependencies'] as $dependency)
+                {
+                    if ($dependency['model'] == $class)
+                    {
+                        return $dependency;
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
      * Delete composite objects (parts in composition relationship)
      * @param $composite_class Active Record Class for composite objects
      * @param $foreign_key Foreign key in composite objects
@@ -1795,6 +1859,98 @@ abstract class TRecord implements IteratorAggregate
     }
     
     /**
+     * Iniialize cache
+     */
+    public static function initCache($classname, $attr)
+    {
+        if (!isset(self::$request_cache))
+        {
+            self::$request_cache = [];
+        }
+        
+        if (!isset(self::$request_cache[$classname]))
+        {
+            self::$request_cache[$classname] = [];
+        }
+        
+        if (!isset(self::$request_cache[$classname][$attr]))
+        {
+            self::$request_cache[$classname][$attr] = [];
+        }
+    }
+    
+    /**
+     * Find within static cache first
+     */
+    public static function findCache($id, $withTrashed = FALSE)
+    {
+        $classname = get_called_class();
+        $attr = constant("{$classname}::PRIMARYKEY");
+        
+        if (!empty(self::$request_cache[$classname][$attr]) && array_key_exists($id, self::$request_cache[$classname][$attr]))
+        {
+            //echo "<br> found {$classname} {$attr} {$id} " . get_class(self::$request_cache[$classname][$attr][$id]) . ' -  ' . self::$request_cache[$classname][$attr][$id]->getPrimaryKeyValue() .  "<br>";
+            return self::$request_cache[$classname][$attr][$id];
+        }
+        
+        $object = self::find($id, $withTrashed);
+        
+        self::initCache($classname, $attr);
+        self::$request_cache[$classname][$attr][$id] = $object;
+        return $object;
+    }
+    
+    /**
+     * Find within static cache first
+     */
+    public static function findCacheBy($id, $attr, $withTrashed = FALSE)
+    {
+        $classname = get_called_class();
+        
+        if (!empty(self::$request_cache[$classname][$attr]) && array_key_exists($id, self::$request_cache[$classname][$attr]))
+        {
+            // echo "<br> found {$classname} {$attr} {$id} " . get_class(self::$request_cache[$classname][$attr][$id]) . ' -  ' . self::$request_cache[$classname][$attr][$id]->$attr .  "<br>";
+            return self::$request_cache[$classname][$attr][$id];
+        }
+        // echo "<br>Not found {$classname} :: {$attr} [ {$id} ]<br>";
+        if ($withTrashed)
+        {
+            $object = self::where($attr, '=', $id)->withTrashed()->first();
+        }
+        else
+        {
+            $object = self::where($attr, '=', $id)->first();
+        }
+        
+        self::initCache($classname, $attr);
+        self::$request_cache[$classname][$attr][$id] = $object;
+        return $object;
+    }
+    
+    /**
+     * Precache a collection
+     */
+    public static function preCache($collection, $attr = null)
+    {
+        $classname = get_called_class();
+        if (empty($attr))
+        {
+            $attr = constant("{$classname}::PRIMARYKEY");
+        }
+        self::initCache($classname, $attr);
+        
+        if ($collection)
+        {
+            foreach ($collection as $object)
+            {
+                $id = $object->$attr;
+                // echo "<br> precache {$classname} {$attr} {$id}<br>";
+                self::$request_cache[$classname][$attr][$id] = $object;
+            }
+        }
+    }
+    
+    /**
      * Returns all objects
      */
     public static function all($indexed = false, $withTrashed = FALSE)
@@ -1852,9 +2008,16 @@ abstract class TRecord implements IteratorAggregate
             foreach ($objects as $object)
             {
                 $key = (isset($object->$indexColumn)) ? $object->$indexColumn : $object->render($indexColumn);
-                $val = (isset($object->$valueColumn)) ? $object->$valueColumn : $object->render($valueColumn);
                 
-                $indexedArray[ $key ] = $val;
+                if ($valueColumn == '*')
+                {
+                    $indexedArray[ $key ] = $object;
+                }
+                else
+                {
+                    $val = (isset($object->$valueColumn)) ? $object->$valueColumn : $object->render($valueColumn);
+                    $indexedArray[ $key ] = $val;
+                }
             }
         }
         
