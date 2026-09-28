@@ -246,4 +246,8 @@ Ao cadastrar um TCC no módulo acadêmico, a plataforma cria automaticamente o e
 
 Desenvolvido para a **FAFRAM — Faculdade Dr. Francisco Maeda**.
 
+<<<<<<< HEAD
 Mantido pela equipe de desenvolvimento e colaboradores do repositório. Para suporte ou reporte de bugs, abra uma *Issue* no repositório oficial.
+=======
+Mantido pela equipe de desenvolvimento e colaboradores do repositório. Para suporte ou reporte de bugs, abra uma *Issue* no repositório oficial.
+>>>>>>> 9f6e3a508e852607139571164852f5e0f9b40714
