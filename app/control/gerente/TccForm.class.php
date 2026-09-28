@@ -20,11 +20,11 @@ class TccForm extends TPage
         $autores     = new TDBMultiSearch('autores', 'teste', 'SystemUser', 'id', 'name');
         $orientador  = new TDBUniqueSearch('id_orientador', 'teste', 'SystemUser', 'id', 'name');
         $banca       = new TDBMultiSearch('banca', 'teste', 'SystemUser', 'id', 'name');
-        $data_tcc    = new TDateTime('data_tcc');
+        $data_tcc    = new TDate('data_tcc');
 
         // Formatação brasileira (BR) para exibição e salvamento no banco de dados
-        $data_tcc->setMask('dd/mm/yyyy hh:ii');
-        $data_tcc->setDatabaseMask('yyyy-mm-dd hh:ii');
+        $data_tcc->setMask('dd/mm/yyyy');
+        $data_tcc->setDatabaseMask('yyyy-mm-dd');
 
         $this->form->addFields([$id_tcc]);
         $this->form->addFields([new TLabel('Tema', 'red')], [$titulo_tcc]);

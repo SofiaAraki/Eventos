@@ -21,8 +21,10 @@ class EventoList extends TPage
         $this->form->setFormTitle(('Gerenciamento de Evento'));
 
         $titulo_evento = new TEntry('titulo_evento');
+        $titulo_evento->setSize('80%');
         $this->form->addFields([new TLabel('Evento:', 'red')], [$titulo_evento]);
         $status_evento = new TCombo('status_evento');
+        $status_evento->setSize('80%');
         $status_evento->addItems(['1' => 'Aberto', '0' => 'Fechado']);
         $this->form->addFields([new TLabel('Status:', 'red')], [$status_evento]);
 
@@ -41,6 +43,8 @@ class EventoList extends TPage
         $col_data_fim_evento         = new TDataGridColumn('data_fim_evento', 'Data de Fim', 'center');
         $col_status_evento    = new TDataGridColumn('status_evento', 'Status', 'center');
         $col_gerente_evento   = new TDataGridColumn('gerente_evento_name', 'Gerente', 'left');
+        $col_atualizado_por = new TDataGridColumn('atualizado_por', 'Atualizado Por', 'left');
+        $col_data_atualizacao = new TDataGridColumn('data_atualizacao', 'Data de Atualização', 'center');
 
         $this->datagrid->addColumn($id_evento);
         $this->datagrid->addColumn($col_titulo_evento);
@@ -48,6 +52,8 @@ class EventoList extends TPage
         $this->datagrid->addColumn($col_data_fim_evento);
         $this->datagrid->addColumn($col_status_evento);
         $this->datagrid->addColumn($col_gerente_evento);
+        $this->datagrid->addColumn($col_atualizado_por);
+        $this->datagrid->addColumn($col_data_atualizacao);
 
         $col_data_inicio_evento->setTransformer(function($value) {
         if (empty($value)) return '—';

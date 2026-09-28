@@ -1,0 +1,99 @@
+<!--[main]-->
+<style>
+    .card-fafram-pro {
+        background-color: var(--bs-card-bg);
+        border: 1px solid var(--bs-border-color);
+        border-radius: 12px;
+        transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        overflow: hidden;
+    }
+
+    .card-fafram-pro:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+        border-color: #ea580c !important;
+    }
+
+    .card-title-clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        height: 2.7em;
+        line-height: 1.35;
+    }
+
+    .info-badge {
+        background: var(--bs-tertiary-bg);
+        color: var(--bs-body-color);
+        border: 1px solid var(--bs-border-color);
+        border-radius: 6px;
+        padding: 4px 8px;
+        font-size: 0.8rem;
+    }
+
+    /* Botão com Gradiente Padrão FAFRAM */
+    .btn-fafram-solid {
+        background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+        color: #ffffff !important;
+        border: none;
+        font-weight: 600;
+        transition: all 0.25s ease;
+    }
+
+    .btn-fafram-solid:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #ea580c 100%);
+        box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+    }
+</style>
+
+<div class="row g-3 g-md-4 pt-2">
+    <!--[tccs]-->
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-fafram-pro shadow-sm h-100">
+            <div class="card-body d-flex flex-column p-3 p-md-4">
+
+                <!-- Status + ID -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge {$status_class} px-2.5 py-1.5 fw-semibold border">
+                        <i class="fas fa-circle ms-1 me-1" style="font-size: 6px; vertical-align: middle;"></i> {$status_texto}
+                    </span>
+                    <small class="text-muted fw-semibold">#{$id_tcc}</small>
+                </div>
+
+                <!-- Título do TCC -->
+                <h5 class="fw-bold mb-3 text-body card-title-clamp text-break" title="{$titulo_tcc}">
+                    {$titulo_tcc}
+                </h5>
+
+                <!-- Orientador -->
+                <div class="text-muted small mb-2 text-truncate" title="{$orientador_name}">
+                    <i class="fas fa-user-tie me-1 text-secondary"></i> <strong>Orientador:</strong> {$orientador_name}
+                </div>
+
+                <!-- Data da Defesa -->
+                <div class="d-flex gap-2 align-items-center mb-3">
+                    <div class="info-badge fw-medium">
+                        <i class="far fa-calendar-alt me-1 text-primary"></i> <strong>Defesa:</strong> {$data_tcc}
+                    </div>
+                </div>
+
+                <!-- Botão de Ação com Gradiente -->
+                <div class="mt-auto pt-3 border-top border-opacity-10 d-flex gap-2">
+                    <a generator="adianti" href="{$action_edit}" class="btn btn-fafram-solid btn-sm w-100 py-2 rounded-2">
+                        <i class="far fa-edit me-1"></i> Editar
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--[/tccs]-->
+
+    <!--[empty]-->
+    <div class="col-12 text-center py-5">
+        <p class="text-muted mb-0">Nenhuma solicitação de TCC encontrada.</p>
+    </div>
+    <!--[/empty]-->
+</div>
+<!--[/main]-->

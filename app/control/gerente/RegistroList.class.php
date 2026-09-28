@@ -14,7 +14,6 @@ class RegistroList extends TPage
         $this->setDatabase('teste');
         $this->setActiveRecord('ViewRegistro');
         
-        // Mapeamento dos campos do form com os campos na ViewRegistro
         $this->addFilterField('id_evento', '=', 'id_evento');
         $this->addFilterField('id_usuario', '=', 'id_usuario');
         $this->setDefaultOrder('id_registro', 'desc');
@@ -22,12 +21,13 @@ class RegistroList extends TPage
         $this->form = new BootstrapFormBuilder('form_search_Registro');
         $this->form->setFormTitle('Registros de Certificados Emitidos');
         
-        // Configuração dos campos Autocomplete / UniqueSearch
         $id_evento = new TDBUniqueSearch('id_evento', 'teste', 'Evento', 'id_evento', 'titulo_evento');
         $id_evento->setMask('{titulo_evento}');
+        $id_evento->setSize('80%');
         
         $id_usuario = new TDBUniqueSearch('id_usuario', 'teste', 'SystemUser', 'id', 'name');
         $id_usuario->setMask('{name}');
+        $id_usuario->setSize('80%');
         
         $this->form->addFields([new TLabel('Evento:')], [$id_evento]);
         $this->form->addFields([new TLabel('Usuário:')], [$id_usuario]);
@@ -63,9 +63,43 @@ class RegistroList extends TPage
         parent::add($vbox);
     }
 
+    public function onDelete($param)
+    {
+        $action = new TAction([$this, 'Delete']);
+        $action->setParameters($param);
+        
+        new TQuestion('Deseja realmente excluir este registro de certificado?', $action);
+    }
+
+    public static function Delete($param)
+    {
+        try
+        {
+            $key = $param['key'] ?? null;
+            if ($key)
+            {
+                TTransaction::open('teste');
+                
+                $object = new Registro($key);
+                $object->delete();
+                
+                TTransaction::close();
+
+                new TMessage('info', 'Registro excluído com sucesso!');
+                
+                AdiantiCoreApplication::loadPage('RegistroList', 'onReload');
+            }
+        }
+        catch (Exception $e)
+        {
+            TTransaction::rollback();
+            new TMessage('error', $e->getMessage());
+        }
+    }
+
     public function onClear()
     {
-        $this->form->clear();
+        $this->form->clear(true);
         TSession::setValue(__CLASS__ . '_filter_id_evento', NULL);
         TSession::setValue(__CLASS__ . '_filter_id_usuario', NULL);
         TSession::setValue('form_search_Registro_data', NULL);

@@ -20,6 +20,7 @@ class EventoMonitorList extends TPage
         $this->form->setFormTitle("Meus Eventos (Monitoria)");
 
         $titulo = new TEntry("titulo_evento");
+        $titulo->setSize('80%');
         $this->form->addFields([new TLabel("Evento")], [$titulo]);
 
         $this->form->addAction("Buscar", new TAction([$this, "onSearch"]), "fas:search blue");

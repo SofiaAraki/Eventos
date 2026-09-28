@@ -32,6 +32,7 @@ class CertificadoForm extends TPage
             'fundacao.png' => 'Modelo FE',
             'fafram.png'   => 'Modelo FAFRAM',
             'gegrao.png'   => 'Modelo GEGRAO',
+            'gecaf.png'   => 'Modelo GECAF',
         ]);
         $tipo_participacao = new TDBCombo(
             'tipo_participacao',
@@ -91,7 +92,7 @@ class CertificadoForm extends TPage
                 throw new Exception('Já existe um certificado para esse evento com esse tipo.');
             }
 
-            $bgPermitidos = ['fundacao.png', 'fafram.png', 'gegrao.png'];
+            $bgPermitidos = ['fundacao.png', 'fafram.png', 'gegrao.png', 'gecaf.png'];
             if (!in_array($data->bg_frente_certificado, $bgPermitidos, true)) {
                 throw new Exception('Imagem de fundo inválida.');
             }

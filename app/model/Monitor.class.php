@@ -2,7 +2,7 @@
 class Monitor extends TRecord
 {
     const TABLENAME = 'monitor';
-    const PRIMARYKEY= 'id';
+    const PRIMARYKEY= 'id_monitor';
     const IDPOLICY = 'serial'; 
 
     public function __construct($id = NULL, $callObjectLoad = TRUE)

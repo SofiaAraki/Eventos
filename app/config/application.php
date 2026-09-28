@@ -64,8 +64,8 @@ return [
         'string' => '#FFC472',
     ],
     'login' => [
-        'logo' => 'fafram.png',
-        'background' => 'fundo.png'
+        'logo' => 'fafram-logo-eventos.png',
+        'background' => 'fafram-background.png'
     ],
     'template' => [
         'navbar' => [

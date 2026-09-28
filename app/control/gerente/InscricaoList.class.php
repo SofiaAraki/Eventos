@@ -22,8 +22,11 @@ class InscricaoList extends TPage
         $this->form->setFormTitle('Gerenciamento de Inscrições');
 
         $id_evento = new TDBUniqueSearch('id_evento', 'teste', 'Evento', 'id_evento', 'titulo_evento');
+        $id_evento->SetSize('80%');
         $id_usuario = new TDBUniqueSearch('id_usuario', 'teste', 'SystemUser', 'id', 'name');
+        $id_usuario->SetSize('80%');
         $status_inscricao = new TCombo('status_inscricao');
+        $status_inscricao->SetSize('80%');
         $status_inscricao->addItems([
             '1' => 'Confirmado',
             '0' => 'Pendente'

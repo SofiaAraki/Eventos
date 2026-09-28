@@ -28,7 +28,9 @@ class SystemProfileForm extends TPage
         
         $name  = new TEntry('name');
         $login = new TEntry('login');
+        $rg    = new TEntry('rg');
         $email = new TEntry('email');
+        $curso = new TEntry('curso');
         
         if ($add_fields)
         {
@@ -46,7 +48,9 @@ class SystemProfileForm extends TPage
         
         $name->setSize('80%');
         $login->setSize('80%');
+        $rg->setSize('80%');
         $email->setSize('80%');
+        $curso->setSize('80%');
         
         if ($add_fields)
         {
@@ -65,8 +69,10 @@ class SystemProfileForm extends TPage
         $email->addValidation( _t('Email'), new TEmailValidator);
         
         $this->form->addFields( [new TLabel(_t('Name'))],  [$name]);
-        $this->form->addFields( [new TLabel(_t('Login'))], [$login]);
+        $this->form->addFields( [new TLabel(('CPF'))], [$login]);
+        $this->form->addFields( [new TLabel(('RG'))], [$rg]);
         $this->form->addFields( [new TLabel(_t('Email'))], [$email]);
+        $this->form->addFields( [new TLabel(('Curso'))], [$curso]);
         
         if ($add_fields)
         {

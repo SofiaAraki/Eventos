@@ -54,6 +54,25 @@ class SystemUserForm extends TPage
         }
         
         $custom_code   = new TEntry('custom_code');
+
+        $curso         = new TCombo('curso');
+        $curso->addItems([
+            'administracao'         => 'Administração',
+            'agrocomputacao'        => 'Agrocomputação',
+            'agronomia'             => 'Agronomia',
+            'biomedicina'           => 'Biomedicina',
+            'ciencias_contabeis'    => 'Ciências Contábeis',
+            'direito'               => 'Direito',
+            'enfermagem'            => 'Enfermagem',
+            'engenharia_civil'      => 'Engenharia Civil',
+            'engenharia_de_producao'=> 'Engenharia de Produção',
+            'engenharia_eletrica'   => 'Engenharia Elétrica',
+            'engenharia_mecanica'   => 'Engenharia Mecânica',
+            'medicina_veterinaria'  => 'Medicina Veterinária',
+            'pedagogia'             => 'Pedagogia',
+            'psicologia'            => 'Psicologia',
+            'sistemas_de_informacao'=> 'Sistemas de Informação',
+        ]);
         
         $password->disableAutoComplete();
         $repassword->disableAutoComplete();
@@ -83,7 +102,7 @@ class SystemUserForm extends TPage
         $login->addValidation('Login', new TRequiredValidator);
         $email->addValidation('Email', new TEmailValidator);
         
-        $this->form->addFields( [new TLabel('ID')], [$id] );
+        $this->form->addFields( [new TLabel('ID')], [$id], [new TLabel(('Curso'))], [$curso] );
         $this->form->addFields( [new TLabel(_t('Name'))], [$name] );
         $this->form->addFields( [new TLabel(('CPF'))], [$login],  [new TLabel(('RG'))], [$rg] );
         $this->form->addFields( [new TLabel(_t('Email'))], [$email] );

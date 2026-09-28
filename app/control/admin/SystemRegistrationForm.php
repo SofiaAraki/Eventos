@@ -28,6 +28,8 @@ class SystemRegistrationForm extends TPage
         
         // create the form fields
         $login      = new TEntry('login');
+        $login->setMask('999.999.999-99');
+        $rg         = new TEntry('rg');
         $name       = new TEntry('name');
         $email      = new TEntry('email');
         $password   = new TPassword('password');
@@ -43,6 +45,7 @@ class SystemRegistrationForm extends TPage
         $repassword->disableToggleVisibility();
         
         $login->addValidation( _t('Login'), new TRequiredValidator);
+        $rg->addValidation( ('RG'), new TRequiredValidator);
         $name->addValidation( _t('Name'), new TRequiredValidator);
         $email->addValidation( _t('Email'), new TRequiredValidator);
         $password->addValidation( _t('Password'), new TRequiredValidator);
@@ -54,10 +57,12 @@ class SystemRegistrationForm extends TPage
         $password->setSize('100%');
         $repassword->setSize('100%');
         $email->setSize('100%');
+        $rg->setSize('100%');
         
-        $this->form->addRowField( _t('Login'), $login, true );
+        $this->form->addRowField( ('CPF'), $login, true );
         $this->form->addRowField( _t('Name'), $name, true );
         $this->form->addRowField( _t('Email'), $email, true );
+        $this->form->addRowField( ('RG'), $rg, true );
         $this->form->addRowField( _t('Password'), $password, true );
         $this->form->addRowField( _t('Password confirmation'), $repassword, true );
         
@@ -101,6 +106,11 @@ class SystemRegistrationForm extends TPage
             if( empty($param['login']) )
             {
                 throw new Exception(TAdiantiCoreTranslator::translate('The field ^1 is required', _t('Login')));
+            }
+
+            if( empty($param['rg']) )
+            {
+                throw new Exception(TAdiantiCoreTranslator::translate('The field ^1 is required', ('RG')));
             }
             
             if( empty($param['name']) )

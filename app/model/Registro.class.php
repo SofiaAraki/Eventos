@@ -17,6 +17,9 @@ class Registro extends TRecord
         parent::addAttribute('data_registro');
     }
 
+    /**
+     * Retorna o objeto Inscricao relacionado
+     */
     public function get_inscricao()
     {
         if (empty($this->inscricao_obj))
@@ -26,6 +29,9 @@ class Registro extends TRecord
         return $this->inscricao_obj;
     }
 
+    /**
+     * Retorna o objeto Certificado relacionado
+     */
     public function get_certificado()
     {
         if (empty($this->certificado_obj))
@@ -37,17 +43,19 @@ class Registro extends TRecord
 
     public function get_nome()
     {
-        return $this->inscricao->usuario_name ?? '-';
+        $inscricao = $this->get_inscricao();
+        return $inscricao->usuario->name ?? ($inscricao->usuario_name ?? '-');
     }
 
     public function get_evento_name()
     {
-        return $this->inscricao->evento_name ?? '-';
+        $inscricao = $this->get_inscricao();
+        return $inscricao->evento->titulo_evento ?? ($inscricao->evento_name ?? '-');
     }
 
     public function get_certificado_name()
     {
-        return $this->certificado->titulo_certificado ?? '-';
+        return $this->get_certificado()->titulo_certificado ?? '-';
     }
 
     public function get_conteudo_final()
@@ -56,6 +64,6 @@ class Registro extends TRecord
         {
             return $this->descricao_certificado;
         }
-        return $this->certificado->descricao_certificado ?? '';
+        return $this->get_certificado()->descricao_certificado ?? '';
     }
 }

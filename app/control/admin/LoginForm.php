@@ -36,6 +36,7 @@ class LoginForm extends TPage
         
         // create the form fields
         $login               = new TEntry('login');
+        $login->setMask('999.999.999-99');
         $password            = new TPassword('password');
         $previous_class      = new THidden('previous_class');
         $previous_method     = new THidden('previous_method');
@@ -99,7 +100,7 @@ class LoginForm extends TPage
         
         if (isset($ini['permission']['user_register']) && $ini['permission']['user_register'] == '1')
         {
-            $this->form->addFooterAction(_t('Create account'), new TAction(['SystemRegistrationForm', 'onLoad']), '');
+            $this->form->addFooterAction(('Primeiro Acesso, clique aqui!'), new TAction(['SystemRegistrationForm', 'onLoad']), '');
         }
         
         if (isset($ini['permission']['reset_password']) && $ini['permission']['reset_password'] == '1')

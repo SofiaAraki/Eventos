@@ -12,7 +12,7 @@ class ScannerPage extends TPage
         $this->form->setFormTitle('Scanner de Credenciamento');
 
         $qrcode = new TQRCodeInputReader('token_credencial');
-        $qrcode->setSize('100%');
+        $qrcode->setSize('80%');
         $qrcode->setChangeAction(new TAction([$this, 'onReadQRCode']));
 
         $this->form->addFields(

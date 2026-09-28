@@ -22,7 +22,9 @@ class TccList extends TPage
         $this->form->setFormTitle('Gerenciamento de TCC');
 
         $titulo_tcc = new TEntry('titulo_tcc');
+        $titulo_tcc->SetSize('80%');
         $orientador = new TDBUniqueSearch('id_orientador', 'teste', 'SystemUser', 'id', 'name');
+        $orientador->SetSize('80%');
 
         $this->form->addFields([new TLabel('Tema:', 'red')], [$titulo_tcc]);
         $this->form->addFields([new TLabel('Orientador:', 'red')], [$orientador]);

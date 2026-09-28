@@ -20,6 +20,7 @@
             $this->form->setFormTitle('Gerenciamento de Certificado');
 
             $titulo_certificado = new TEntry('titulo_certificado');
+            $titulo_certificado->SetSize('80%');
 
             $this->form->addFields(
                 [new TLabel('Modelo', 'red')],

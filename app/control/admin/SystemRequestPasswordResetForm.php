@@ -32,12 +32,13 @@ class SystemRequestPasswordResetForm extends TPage
         
         // create the form fields
         $login = new TEntry('login');
-        
+        $login->setMask('999.999.999-99');
+
         // define the sizes
         $login->setSize('100%');
         
         $login->placeholder = _t('User');
-        $this->form->addRowField(_t('Login'), $login, true);
+        $this->form->addRowField(('CPF'), $login, true);
         
         $this->form->addAction(_t('Send'), new TAction(array($this, 'onRequest')), '');
         

@@ -5,6 +5,7 @@ class RelatorioEventoMonitor extends TPage
     protected $datagrid;
     protected $pageNavigation;
     protected $evento;
+    protected $form;
 
     use Adianti\Base\AdiantiStandardFormTrait;
 
@@ -24,9 +25,13 @@ class RelatorioEventoMonitor extends TPage
             TSession::setValue('eventoid', $id_evento);
             $this->evento = new Evento($id_evento);
 
-            $countTodos     = Inscricao::where('id_evento', '=', $id_evento)->count();
+            $countTodos     = ViewRelatorioParticipantes::where('id_evento', '=', $id_evento)->count();
             $countPresentes = ViewRelatorioParticipantes::where('id_evento', '=', $id_evento)->where('esta_presente', '>', 0)->count();
             $countSairam    = ViewRelatorioParticipantes::where('id_evento', '=', $id_evento)->where('ja_saiu', '>', 0)->count();
+            $countCompareceram = $countPresentes + $countSairam;
+            
+            $taxaPresenca = $countTodos > 0 ? round(($countCompareceram / $countTodos) * 100, 1) : 0;
+            //$taxaPresenca = $countTodos > 0 ? round(($countPresentes / $countTodos) * 100, 1) : 0;
 
             TTransaction::close();
 
@@ -55,34 +60,84 @@ class RelatorioEventoMonitor extends TPage
             $ind3->setColor('yellow');
             $ind3->setNumericMask(0, '', '.');
 
+            $ind4 = new TNumericIndicator;
+            $ind4->setTitle('TAXA DE PRESENÇA');
+            $ind4->setValue($taxaPresenca);
+            $ind4->setIcon('chart-pie');
+            $ind4->setColor('purple');
+            $ind4->setNumericMask(1, ',', '.', ' %');
+
             $row_indicators->add($div1 = TElement::tag('div', $ind1));
             $row_indicators->add($div2 = TElement::tag('div', $ind2));
             $row_indicators->add($div3 = TElement::tag('div', $ind3));
-            $div1->class = $div2->class = $div3->class = 'col-sm-4 col-xs-12';
+            $row_indicators->add($div4 = TElement::tag('div', $ind4));
+            $div1->class = $div2->class = $div3->class = $div4->class = 'col-sm-3 col-xs-12';
+
+            $this->form = new BootstrapFormBuilder('form_busca_relatorio');
+            $this->form->setFormTitle('Filtros do Relatório');
+
+            $usuario_name = new TEntry('usuario_name');
+
+            $status_filtro = new TCombo('status_filtro');
+            $status_filtro->addItems([
+                ''          => 'Todos os Status',
+                'presente'  => 'Presentes Agora',
+                'confirmado' => 'Confirmados',
+                'pendente'  => 'Pendentes'
+            ]);
+
+            $this->form->addFields([new TLabel('Participante')], [$usuario_name]);
+            $this->form->addFields([new TLabel('Status')], [$status_filtro]);
+
+            $this->form->addAction('Filtrar', new TAction([$this, 'onSearch']), 'fa:search blue');
+            $this->form->addAction('Limpar', new TAction([$this, 'clearFilters']), 'fa:eraser red');
+
+            $this->form->setData(TSession::getValue(__CLASS__ . '_filter_data'));
 
             $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
             $this->datagrid->style = 'width:100%';
 
-            $this->datagrid->addColumn(new TDataGridColumn('id_inscricao', 'ID', 'center', '5%'));
-            $this->datagrid->addColumn(new TDataGridColumn('usuario_name', 'Nome', 'left'));
-            
+            $col_id     = new TDataGridColumn('id_inscricao', 'ID', 'center', '5%');
+            $col_nome   = new TDataGridColumn('usuario_name', 'Nome', 'left');
             $col_status = new TDataGridColumn('status_label', 'Status', 'center');
-            $col_status->setTransformer(function ($value) {
-                $class = $value == 'Confirmado' ? 'success' : 'warning';
-                return "<span class='badge badge-{$class}'>{$value}</span>";
-            });
-            $this->datagrid->addColumn($col_status);
 
-            $this->datagrid->addColumn(new TDataGridColumn('ultima_entrada', 'Entrada', 'center'));
-            $this->datagrid->addColumn(new TDataGridColumn('ultima_saida', 'Saída', 'center'));
-            $this->datagrid->addColumn(new TDataGridColumn('permanencia_total', 'Permanência', 'center'));
+            $col_id->setAction(new TAction([$this, 'onReload']), ['order' => 'id_inscricao']);
+            $col_nome->setAction(new TAction([$this, 'onReload']), ['order' => 'usuario_name']);
+
+            $col_status->setTransformer(function ($value) {
+                $class = $value == 'Confirmado' ? 'success' : ($value == 'Pendente' ? 'warning' : 'danger');
+                return "<span class='label label-{$class}'>{$value}</span>";
+            });
+
+            $col_entrada = new TDataGridColumn('ultima_entrada', 'Entrada', 'center');
+            $col_entrada->setTransformer(fn($v) => !empty($v) ? (new DateTime($v))->format('d/m/Y H:i') : '-');
+
+            $col_saida = new TDataGridColumn('ultima_saida', 'Saída', 'center');
+            $col_saida->setTransformer(function($v, $object) {
+                if ((int) $object->esta_presente === 1) {
+                    return '<span class="label label-info">EM EVENTO</span>';
+                }
+                if (!empty($v)) {
+                    return (new DateTime($v))->format('d/m/Y H:i');
+                }
+                return '-';
+            });
+
+            $col_perm = new TDataGridColumn('permanencia_total', 'Permanência', 'center');
+
+            $this->datagrid->addColumn($col_id);
+            $this->datagrid->addColumn($col_nome);
+            $this->datagrid->addColumn($col_status);
+            $this->datagrid->addColumn($col_entrada);
+            $this->datagrid->addColumn($col_saida);
+            $this->datagrid->addColumn($col_perm);
             $this->datagrid->addColumn(new TDataGridColumn('responsavel_nome', 'Responsável', 'center'));
 
             $this->datagrid->createModel();
 
             $panel = new TPanelGroup($this->evento->titulo_evento);
             $panel->add($this->datagrid);
-            $panel->addHeaderActionLink('CSV', new TAction([$this, 'exportAsCSV']), 'fa:table blue');
+            $panel->addHeaderActionLink('Exportar CSV', new TAction([$this, 'exportAsCSV']), 'fa:file-excel green');
 
             $this->pageNavigation = new TPageNavigation;
             $this->pageNavigation->setAction(new TAction([$this, 'onReload']));
@@ -92,6 +147,7 @@ class RelatorioEventoMonitor extends TPage
             $vbox->style = 'width:100%';
             $vbox->add(new TXMLBreadCrumb('menu.xml', __CLASS__));
             $vbox->add($row_indicators);
+            $vbox->add($this->form);
             $vbox->add($panel);
 
             parent::add($vbox);
@@ -103,23 +159,54 @@ class RelatorioEventoMonitor extends TPage
         }
     }
 
+    public function onSearch()
+    {
+        $data = $this->form->getData();
+        TSession::setValue(__CLASS__ . '_filter_data', $data);
+        $this->onReload(['offset' => 0, 'first_page' => 1]);
+    }
+
+    public function clearFilters()
+    {
+        TSession::setValue(__CLASS__ . '_filter_data', null);
+        $this->form->clear();
+        $this->onReload();
+    }
+
     public function onReload($param = null)
     {
         try {
             TTransaction::open('teste');
             $this->datagrid->clear();
 
-            $repository = new TRepository('Inscricao');
+            $repository = new TRepository('ViewRelatorioParticipantes');
             $criteria = new TCriteria;
             $criteria->add(new TFilter('id_evento', '=', TSession::getValue('eventoid')));
+
+            $filterData = TSession::getValue(__CLASS__ . '_filter_data');
+            if ($filterData) {
+                if (!empty($filterData->usuario_name)) {
+                    $criteria->add(new TFilter('usuario_name', 'like', "%{$filterData->usuario_name}%"));
+                }
+                if (!empty($filterData->status_filtro)) {
+                    if ($filterData->status_filtro == 'presente') {
+                        $criteria->add(new TFilter('esta_presente', '>', 0));
+                    } elseif ($filterData->status_filtro == 'confirmado') {
+                        $criteria->add(new TFilter('status_label', '=', 'Confirmado'));
+                    } elseif ($filterData->status_filtro == 'pendente') {
+                        $criteria->add(new TFilter('status_label', '=', 'Pendente'));
+                    }
+                }
+            }
+
             $criteria->setProperty('limit', 10);
             $criteria->setProperties($param);
 
-            $inscricoes = $repository->load($criteria);
+            $registros = $repository->load($criteria);
 
-            if ($inscricoes) {
-                foreach ($inscricoes as $inscricao) {
-                    $this->datagrid->addItem($inscricao);
+            if ($registros) {
+                foreach ($registros as $registro) {
+                    $this->datagrid->addItem($registro);
                 }
             }
 
@@ -141,14 +228,30 @@ class RelatorioEventoMonitor extends TPage
             TTransaction::open('teste');
 
             $id_evento = TSession::getValue('eventoid');
-            $repository = new TRepository('Inscricao');
+            $repository = new TRepository('ViewRelatorioParticipantes');
             $criteria = new TCriteria;
             $criteria->add(new TFilter('id_evento', '=', $id_evento));
+
+            $filterData = TSession::getValue(__CLASS__ . '_filter_data');
+            if ($filterData) {
+                if (!empty($filterData->usuario_name)) {
+                    $criteria->add(new TFilter('usuario_name', 'like', "%{$filterData->usuario_name}%"));
+                }
+                if (!empty($filterData->status_filtro)) {
+                    if ($filterData->status_filtro == 'presente') {
+                        $criteria->add(new TFilter('esta_presente', '>', 0));
+                    } elseif ($filterData->status_filtro == 'confirmado') {
+                        $criteria->add(new TFilter('status_label', '=', 'Confirmado'));
+                    } elseif ($filterData->status_filtro == 'pendente') {
+                        $criteria->add(new TFilter('status_label', '=', 'Pendente'));
+                    }
+                }
+            }
+
             $criteria->setProperty('order', 'id_inscricao');
+            $registros = $repository->load($criteria);
 
-            $inscricoes = $repository->load($criteria);
-
-            if (!$inscricoes) {
+            if (!$registros) {
                 new TMessage('info', 'Nenhum registro encontrado para exportar.');
                 TTransaction::close();
                 return;
@@ -157,19 +260,25 @@ class RelatorioEventoMonitor extends TPage
             $file = 'app/output/relatorio_evento_' . $id_evento . '.csv';
             $handler = fopen($file, 'w');
             fprintf($handler, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            fputcsv($handler, ['ID', 'Nome', 'Tipo', 'Status', 'Entrada', 'Saída', 'Permanência', 'Responsável'], ';', '"', "");
+            fputcsv($handler, ['ID', 'Nome', 'Status', 'Entrada', 'Saída', 'Permanência', 'Responsável'], ';', '"', "");
 
-            foreach ($inscricoes as $inscricao)
+            foreach ($registros as $reg)
             {
+                $saidaTxt = '-';
+                if ((int) $reg->esta_presente === 1) {
+                    $saidaTxt = 'EM EVENTO';
+                } elseif (!empty($reg->ultima_saida)) {
+                    $saidaTxt = (new DateTime($reg->ultima_saida))->format('d/m/Y H:i');
+                }
+
                 $row = [
-                    $inscricao->id_inscricao,
-                    $inscricao->usuario_name,
-                    ucfirst($inscricao->tipo_participacao),
-                    $inscricao->status_label,
-                    $inscricao->ultima_entrada,
-                    $inscricao->ultima_saida,
-                    $inscricao->permanencia_total,
-                    $inscricao->responsavel_nome
+                    $reg->id_inscricao,
+                    $reg->usuario_name,
+                    $reg->status_label,
+                    !empty($reg->ultima_entrada) ? (new DateTime($reg->ultima_entrada))->format('d/m/Y H:i') : '-',
+                    $saidaTxt,
+                    $reg->permanencia_total,
+                    $reg->responsavel_nome ?? '-'
                 ];
                 fputcsv($handler, $row, ';', '"', "");
             }

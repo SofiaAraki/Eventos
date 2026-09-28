@@ -7,6 +7,10 @@
                 <icon>fas:calendar-alt fa-fw</icon>
                 <action>EventosAbertosList</action>
             </menuitem>
+            <menuitem>
+                <icon>fas:certificate fa-fw</icon>
+                <action>TipoParticipacaoModalView</action>
+            </menuitem>
             <menuitem label='Minhas Inscrições'>
                 <icon>fas:clipboard-list fa-fw</icon>
                 <action>MinhasInscricoesList</action>
@@ -21,17 +25,25 @@
     <menuitem label='Coordenador'>
         <icon>fas:user-tie fa-fw</icon>
         <menu>
-            <menuitem label='Solicitações de Eventos'>
-                <icon>fas:clipboard-check fa-fw</icon>
-                <action>SolicitacaoEventoList</action>
+            <menuitem label='Emissão Manual de Certificados'>
+                <icon>fas:award fa-fw</icon>
+                <action>EmissaoManualList</action>
             </menuitem>
             <menuitem>
-                <icon>fas:clipboard-check fa-fw</icon>
-                <action>EventoFormCoordenador</action>
+                <action>EmissaoManualForm</action>
             </menuitem>
-            <menuitem label='Validador de Certificados'>
-                <icon>fas:user-check</icon>
-                <action>Validador</action>
+            <menuitem label='Solicitações'>
+                <icon>fas:clipboard-list fa-fw</icon>
+                <menu>
+                    <menuitem label='Eventos'>
+                        <icon>fas:calendar-alt fa-fw</icon>
+                        <action>SolicitacaoListCoordenador</action>
+                    </menuitem>
+                    <menuitem label='TCCs'>
+                        <icon>fas:graduation-cap fa-fw</icon>
+                        <action>TccListCoordenador</action>
+                    </menuitem>
+                </menu>
             </menuitem>
         </menu>
     </menuitem>
@@ -110,9 +122,9 @@
                 <icon>fas:book fa-fw</icon>
                 <action>TccForm</action>
             </menuitem>
-            <menuitem label='Aprovar Eventos'>
+            <menuitem label='Aprovar Solicitações de Eventos'>
                 <icon>fas:check-double fa-fw</icon>
-                <action>AprovacaoEventoList</action>
+                <action>AprovacaoList</action>
             </menuitem>
         </menu>
     </menuitem>
