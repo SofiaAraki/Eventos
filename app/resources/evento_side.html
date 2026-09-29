@@ -30,10 +30,11 @@
         gap: 10px;
     }
 
-    /* Container de Imagem */
+    /* Container da Imagem */
     .side-img-wrapper {
+        position: relative;
         width: 100%;
-        height: 180px;
+        height: 220px; /* Altura ligeiramente maior para destaque no painel lateral */
         border-radius: 8px;
         background-color: var(--bs-tertiary-bg);
         display: flex;
@@ -43,10 +44,35 @@
         border: 1px solid var(--bs-border-color);
     }
 
+    /* Fundo desfocado */
+    .side-img-wrapper::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        background-image: var(--bg-image);
+        background-size: cover;
+        background-position: center;
+        filter: blur(12px) brightness(0.5);
+        z-index: 1;
+    }
+
+    /* Imagem principal */
+    .side-img-wrapper img {
+        position: relative;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        z-index: 2;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
     .side-img-wrapper img.img-cover {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain !important;
         object-position: center;
     }
 
@@ -130,7 +156,7 @@
     <div class="side-panel-body">
         
         <!-- Banner / Logo -->
-        <div class="side-img-wrapper mb-3">
+        <div class="side-img-wrapper mb-3" style="--bg-image: url('{$arte}');">
             <img src="{$arte}" class="{$img_class}" alt="Imagem do Evento">
         </div>
 

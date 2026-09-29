@@ -29,6 +29,12 @@ class Evento extends TRecord
         return $user ? $user->name : '-';
     }
 
+    public function get_atualizado_por_name()
+    {
+        $user = SystemUser::find($this->atualizado_por);
+        return $user ? $user->name : '-';
+    }
+
     public function get_arte_evento_url()
     {
         $arte = $this->arte_evento;
